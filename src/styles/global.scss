@@ -1,6 +1,19 @@
 @import 'modern-normalize';
+@import './mixins.scss';
 @import './fonts.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+}
 
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: $color-body-bg;
+  color: $color-text-primary;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
 }

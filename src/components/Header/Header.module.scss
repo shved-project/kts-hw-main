@@ -1,0 +1,91 @@
+@import '/src/styles/mixins.scss';
+
+.header {
+  height: 90px;
+  background-color: $color-bg-block-primary;
+
+  &__container {
+    height: 100%;
+  }
+
+  &__content {
+    display: flex;
+    position: relative;
+    height: inherit;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__nav {
+    position: absolute;
+    height: inherit;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &-list {
+      display: flex;
+      height: inherit;
+      gap: $space-xl;
+      list-style: none;
+    }
+
+    &-item {
+      display: flex;
+      align-items: stretch;
+    }
+
+    &-link {
+      display: flex;
+      align-items: center;
+      position: relative;
+      transition: color $transition-duration $transition-timing-function;
+
+      &:hover {
+        color: $color-brand-hover;
+
+        &::after {
+          background-color: $color-brand-hover;
+        }
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        transition: background-color $transition-duration
+          $transition-timing-function;
+      }
+
+      &--active {
+        color: $color-brand;
+
+        &:hover {
+          color: $color-brand;
+
+          &::after {
+            background-color: $color-brand;
+          }
+        }
+
+        &::after {
+          background-color: $color-brand;
+          font-weight: 600;
+        }
+
+        .header__nav-link-text {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: $space-m;
+  }
+}
