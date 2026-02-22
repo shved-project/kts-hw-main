@@ -3,11 +3,11 @@ import { NavLink } from 'react-router';
 import styles from '../../Header.module.scss';
 import Text from 'components/Text';
 
-type HeaderNavLinkProps = {
+type HeaderNavLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   link: HeaderNavType;
 };
 
-const HeaderNavLink: React.FC<HeaderNavLinkProps> = ({ link }) => {
+const HeaderNavLink: React.FC<HeaderNavLinkProps> = ({ link, ...rest }) => {
   return (
     <li className={styles['header__nav-item']}>
       <NavLink
@@ -17,6 +17,7 @@ const HeaderNavLink: React.FC<HeaderNavLinkProps> = ({ link }) => {
             : styles['header__nav-link']
         }
         to={link.href}
+        {...rest}
       >
         <Text className={styles['header__nav-link-text']} view="p-18">
           {link.text}

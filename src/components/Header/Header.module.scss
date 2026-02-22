@@ -1,8 +1,10 @@
 @import '/src/styles/mixins.scss';
 
 .header {
-  height: 90px;
+  position: relative;
+  height: $header-height;
   background-color: $color-bg-block-primary;
+  border-bottom: 2px solid #f3f3f3;
 
   &__container {
     height: 100%;
@@ -10,24 +12,75 @@
 
   &__content {
     display: flex;
-    position: relative;
     height: inherit;
     justify-content: space-between;
     align-items: center;
   }
 
-  &__nav {
-    position: absolute;
+  &__nav-wrapper {
     height: inherit;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: background-color $transition-duration
+      $transition-timing-function;
+
+    @include respond(md) {
+      display: flex;
+      justify-content: end;
+      transform: translate(0, 0);
+      top: $header-height;
+      left: 0;
+      right: 0;
+      height: calc(100vh - $header-height);
+      pointer-events: none;
+    }
+
+    &--active {
+      @include respond(md) {
+        pointer-events: all;
+        background-color: #00000033;
+
+        .header__nav-bg-mobile {
+          transform: translateX(0);
+        }
+      }
+    }
+  }
+  &__nav-bg-mobile {
+    height: inherit;
+    transition: transform $transition-duration $transition-timing-function;
+
+    @include respond(md) {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      gap: $space-xl;
+      overflow-y: auto;
+      min-height: calc(100vh - $header-height);
+      background-color: $color-bg-block-primary;
+      padding: $space-xl 80px;
+      transform: translateX(100%);
+    }
+  }
+  &__nav {
+    height: inherit;
+
+    @include respond(md) {
+      height: auto;
+    }
 
     &-list {
       display: flex;
       height: inherit;
       gap: $space-xl;
       list-style: none;
+
+      @include respond(md) {
+        flex-direction: column;
+      }
     }
 
     &-item {
@@ -38,6 +91,7 @@
     &-link {
       display: flex;
       align-items: center;
+      height: inherit;
       position: relative;
       transition: color $transition-duration $transition-timing-function;
 
@@ -87,5 +141,72 @@
     display: flex;
     align-items: center;
     gap: $space-m;
+
+    &-desktop {
+      @include respond(md) {
+        display: none;
+      }
+    }
+
+    &-mobile {
+      display: none;
+
+      @include respond(md) {
+        display: flex;
+      }
+    }
+  }
+
+  &__burger {
+    display: none;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    background: none;
+    border: none;
+
+    @include respond(md) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-item {
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background-color: $color-text-primary;
+      transition-property: opacity, translate, rotate;
+      transition-duration: 0s, $transition-duration, $transition-duration;
+      transition-delay: $transition-duration, $transition-duration, 0s;
+
+      &:first-child {
+        translate: 0 -12px;
+      }
+      &:nth-child(2) {
+        opacity: 1;
+      }
+      &:last-child {
+        translate: 0 12px;
+      }
+    }
+
+    &--active {
+      .header__burger-item {
+        transition-delay: $transition-duration, 0s, $transition-duration;
+
+        &:first-child {
+          translate: 0 0;
+          rotate: 45deg;
+        }
+        &:nth-child(2) {
+          opacity: 0;
+        }
+        &:last-child {
+          translate: 0 0;
+          rotate: -45deg;
+        }
+      }
+    }
   }
 }
