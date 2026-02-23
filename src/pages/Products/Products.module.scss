@@ -19,12 +19,23 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
 
+    @include respond(md) {
+      grid-template-columns: 1fr 1fr;
+    }
+    @include respond(sm) {
+      grid-template-columns: 1fr;
+    }
+
     &-title {
       display: flex;
       align-items: center;
       gap: $space-m;
       margin-bottom: 35px;
     }
+  }
+
+  &__card {
+    margin-inline: auto;
   }
 
   &__loader {

@@ -83,6 +83,7 @@ const ProductsList = () => {
       <div className={styles.products__list}>
         {state.items.map((product) => (
           <Card
+            className={styles.products__card}
             image={product.images[0].url}
             title={product.title}
             subtitle={product.description}
