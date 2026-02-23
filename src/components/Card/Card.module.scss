@@ -1,10 +1,13 @@
 @import '/src/styles/mixins.scss';
 
 .card {
+  display: flex;
+  flex-direction: column;
   max-width: 360px;
   cursor: pointer;
   overflow: hidden;
   transition: box-shadow $transition-duration $transition-timing-function;
+  background-color: $color-bg-block-primary;
 
   &:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
@@ -22,7 +25,10 @@
   }
 
   &__content {
-    background-color: $color-bg-block-primary;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
     padding: 24px 12px;
   }
 

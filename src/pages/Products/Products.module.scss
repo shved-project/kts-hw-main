@@ -1,0 +1,41 @@
+@import '/src/styles/mixins.scss';
+
+.products {
+  margin-top: 100px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-m;
+    text-align: center;
+    max-width: 650px;
+    margin-inline: auto;
+    margin-bottom: 50px;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: $space-m;
+      margin-bottom: 35px;
+    }
+  }
+
+  &__loader {
+    display: block;
+    margin-inline: auto;
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-xs;
+  }
+}
