@@ -30,6 +30,14 @@ const Header = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (isBurgerActive) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [isBurgerActive]);
+
   const handleBurgerClick = () => {
     setIsBurgerActive((prev) => !prev);
   };

@@ -1,0 +1,8 @@
+@use '@styles/mixins' as *;
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xs;
+}

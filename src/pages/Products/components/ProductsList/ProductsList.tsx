@@ -7,7 +7,7 @@ import Button from 'components/Button';
 import { useNavigate } from 'react-router';
 import routerData from 'config/routerData';
 import Loader from 'components/Loader';
-import errorIcon from 'assets/icons/error.svg';
+import ErrorApiMessage from 'components/ErrorApiMessage';
 
 type ProductsState = {
   items: ProductType[];
@@ -60,14 +60,7 @@ const ProductsList = () => {
   }
 
   if (error) {
-    return (
-      <div className={styles.products__error}>
-        <img src={errorIcon} alt="error" />
-        <Text view="p-20" tag="h1" weight="semiBold">
-          {error}
-        </Text>
-      </div>
-    );
+    return <ErrorApiMessage error={error} />;
   }
 
   return (
