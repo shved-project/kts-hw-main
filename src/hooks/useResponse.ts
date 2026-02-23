@@ -13,6 +13,8 @@ const useResponse = <T, U>(initState: T, effect: effectFunctionType<T, U>) => {
 
   useEffect(() => {
     effect(setState, setIsLoading, setError);
+    // Хук предполагается использовать только для получения данных при загрузке страницы, поэтому зависимости не нужны
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { state, isLoading, error };
