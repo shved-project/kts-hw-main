@@ -1,0 +1,88 @@
+@import '/src/styles/mixins.scss';
+
+.product {
+  margin-bottom: $space-xl;
+
+  &__margin-top {
+    margin-top: 60px;
+  }
+
+  &__content {
+    display: flex;
+    gap: $space-xl;
+    margin-top: $space-l;
+  }
+
+  &__swiper {
+    position: relative;
+    aspect-ratio: 1/1;
+    flex-basis: 50%;
+    min-width: 0;
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: $z-10;
+      width: 64px;
+      height: 64px;
+      background-color: #000000;
+      border-radius: 50%;
+      transition: background-color $transition-duration
+        $transition-timing-function;
+
+      &-prev {
+        left: $space-m;
+      }
+
+      &-next {
+        right: $space-m;
+      }
+
+      &-disabled {
+        cursor: default;
+        background-color: #00000093;
+      }
+    }
+  }
+  &__info {
+    flex-basis: 50%;
+
+    &-text {
+      margin-bottom: 56px;
+    }
+    &-title {
+      margin-bottom: $space-m;
+    }
+    &-price {
+      margin-bottom: $space-xl;
+    }
+    &-buttons {
+      display: flex;
+      gap: $space-xl;
+    }
+    &-button-cart {
+      background: none;
+      color: $color-text-primary;
+      border: 1px solid $color-text-secondary;
+      transition: $transition-duration $transition-timing-function;
+
+      &:not(:disabled):hover {
+        background: none;
+        color: $color-text-secondary;
+      }
+    }
+  }
+}

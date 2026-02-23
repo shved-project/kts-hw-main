@@ -1,8 +1,11 @@
-import type { PaginationType } from './pagination.type';
-
 export type ResponseType<T> = {
   data: T;
   meta: {
-    pagination: PaginationType;
+    pagination: {
+      page: number;
+      pageCount: number;
+      pageSize: number;
+      total: number;
+    };
   };
 };

@@ -17,7 +17,7 @@ type ProductsState = {
 const ProductsList = () => {
   const navigate = useNavigate();
 
-  const handleClickCard = (id: number) => {
+  const handleClickCard = (id: string) => {
     navigate(routerData.product.create(id));
   };
 
@@ -96,7 +96,7 @@ const ProductsList = () => {
                 ${product.price}
               </Text>
             }
-            onClick={() => handleClickCard(product.id)}
+            onClick={() => handleClickCard(product.documentId)}
             key={product.id}
           />
         ))}

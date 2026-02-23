@@ -6,6 +6,7 @@ export type ProductType = {
   description: string;
   discountPercent: number;
   id: number;
+  documentId: string;
   images: { url: string }[];
   isInStock: boolean;
   price: number;
@@ -26,4 +27,15 @@ export const getProducts = async (): Promise<ResponseType<ProductType[]>> => {
   const { data } = await api.get(`/products?${query}`);
 
   return data;
+};
+
+export const getProduct = async (id: string): Promise<ProductType> => {
+  const query = qs.stringify(
+    { populate: ['images', 'productCategory'] },
+    { encodeValuesOnly: true }
+  );
+
+  const { data } = await api.get(`/products/${id}?${query}`);
+
+  return data.data;
 };

@@ -1,0 +1,10 @@
+@import '/src/styles/mixins.scss';
+
+.button-back {
+  background: none;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  gap: $space-xs;
+}
