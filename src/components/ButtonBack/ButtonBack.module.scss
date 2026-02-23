@@ -1,4 +1,4 @@
-@import '/src/styles/mixins.scss';
+@use '@styles/mixins' as *;
 
 .button-back {
   background: none;

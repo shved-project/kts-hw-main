@@ -1,7 +1,7 @@
-@import 'modern-normalize';
-@import './mixins.scss';
-@import './fonts.scss';
-@import 'swiper/css';
+@use 'modern-normalize';
+@use '@styles/mixins' as *;
+@use '@styles/fonts' as *;
+@use 'swiper/css';
 
 * {
   margin: 0;
