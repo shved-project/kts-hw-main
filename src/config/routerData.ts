@@ -10,7 +10,7 @@ const routerData = {
   },
   product: {
     href: '/products/:id',
-    create: (id: number) => `/product/${id}`,
+    create: (id: number) => `/products/${id}`,
   },
   categories: {
     href: '/categories',
