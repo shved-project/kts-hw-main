@@ -62,25 +62,28 @@ const ProductsList = observer(() => {
         </div>
       )}
       <div className={styles.products__list}>
-        {productsList.map((product) => (
-          <Card
-            className={styles.products__card}
-            image={product.images[0].url}
-            title={product.title}
-            subtitle={product.description}
-            captionSlot={product.productCategory.title}
-            actionSlot={
-              <Button onClick={handleClickButton}>Add to Cart</Button>
-            }
-            contentSlot={
-              <Text weight="bold" view="p-18">
-                ${product.price}
-              </Text>
-            }
-            onClick={() => handleClickCard(product.documentId)}
-            key={product.id}
-          />
-        ))}
+        {productsList.map((product) => {
+          const productId = product.documentId;
+          return (
+            <Card
+              className={styles.products__card}
+              image={product.images[0].url}
+              title={product.title}
+              subtitle={product.description}
+              captionSlot={product.productCategory.title}
+              actionSlot={
+                <Button onClick={handleClickButton}>Add to Cart</Button>
+              }
+              contentSlot={
+                <Text weight="bold" view="p-18">
+                  ${product.price}
+                </Text>
+              }
+              onClick={() => handleClickCard(productId)}
+              key={product.id}
+            />
+          );
+        })}
       </div>
       {!isAllProducts && (
         <div className={styles['products__loader-wrapper']} ref={loaderRef}>

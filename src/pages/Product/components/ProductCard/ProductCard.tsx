@@ -1,48 +1,23 @@
 import { useParams } from 'react-router';
 import ProductInfo from '../ProductInfo';
 import SwiperImages from '../SwiperImages';
-import { getProduct, type ProductType } from 'api/products.api';
-import type { effectFunctionType } from 'hooks/useResponse';
-import axios from 'axios';
-import useResponse from 'hooks/useResponse';
+import { type ProductType } from 'api/products.api';
 import Loader from 'components/Loader';
 import styles from '../../Product.module.scss';
 import classNames from 'classnames';
 import ErrorApiMessage from 'components/ErrorApiMessage';
+import productDetailsStore from 'store/ProductDetailsStore';
+import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
-const ProductCard = () => {
+const ProductCard = observer(() => {
   const { id } = useParams();
 
-  const responseEffect: effectFunctionType<ProductType | null, string> = async (
-    setState,
-    setIsLoading,
-    setError
-  ) => {
-    if (id) {
-      try {
-        setIsLoading(true);
-        setError(null);
+  useEffect(() => {
+    productDetailsStore.loadProduct(id as string);
+  }, [id]);
 
-        const response = await getProduct(id);
-
-        setState(response);
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.status === 404) {
-            setError('Товар не найден');
-          } else {
-            setError('Не удалось загрузить товар. Попробуйте позже');
-          }
-        } else {
-          setError('Произошла неизвестная ошибка. Попробуйте позже');
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    }
-  };
-
-  const { state, isLoading, error } = useResponse(null, responseEffect);
+  const { isLoading, error, product } = productDetailsStore;
 
   if (isLoading) {
     return (
@@ -66,10 +41,10 @@ const ProductCard = () => {
 
   return (
     <div className={styles.product__content}>
-      <SwiperImages images={state?.images || []} />
-      <ProductInfo product={state as ProductType} />
+      <SwiperImages images={product?.images || []} />
+      <ProductInfo product={product as ProductType} />
     </div>
   );
-};
+});
 
 export default ProductCard;
