@@ -1,5 +1,5 @@
-import { getProducts, type ProductType } from 'api/products.api';
-import useResponse, { type effectFunctionType } from 'hooks/useResponse';
+// import { getProducts, type ProductType } from 'api/products.api';
+// import useResponse, { type effectFunctionType } from 'hooks/useResponse';
 import styles from '../../Products.module.scss';
 import Text from 'components/Text';
 import Card from 'components/Card';
@@ -8,13 +8,33 @@ import { useNavigate } from 'react-router';
 import routerData from 'config/routerData';
 import Loader from 'components/Loader';
 import ErrorApiMessage from 'components/ErrorApiMessage';
+import productsStore from 'store/ProductsStore/ProductsStore';
+import { observer } from 'mobx-react-lite';
+import { useEffect, useRef } from 'react';
 
-type ProductsState = {
-  items: ProductType[];
-  total: number;
-};
+const ProductsList = observer(() => {
+  const { productsList, total, error, isAllProducts } = productsStore;
 
-const ProductsList = () => {
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    productsStore.loadProducts();
+
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        productsStore.loadProducts();
+      }
+    });
+
+    if (loaderRef.current) {
+      obs.observe(loaderRef.current);
+    }
+
+    return () => {
+      obs.disconnect();
+    };
+  }, []);
+
   const navigate = useNavigate();
 
   const handleClickCard = (id: string) => {
@@ -25,56 +45,24 @@ const ProductsList = () => {
     event.stopPropagation();
   };
 
-  const responseEffect: effectFunctionType<ProductsState, string> = async (
-    setState,
-    setIsLoading,
-    setError
-  ) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const response = await getProducts();
-
-      setState({
-        items: response.data,
-        total: response.meta.pagination.total,
-      });
-    } catch {
-      setError('Не удалось загрузить товары. Попробуйте позже');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const { state, isLoading, error } = useResponse(
-    {
-      items: [],
-      total: 0,
-    },
-    responseEffect
-  );
-
-  if (isLoading) {
-    return <Loader className={styles.products__loader} />;
-  }
-
   if (error) {
     return <ErrorApiMessage error={error} />;
   }
 
   return (
     <div>
-      <div className={styles['products__list-title']}>
-        <Text tag="h2" view="title-h2">
-          Total products
-        </Text>
-        <Text color="accent" weight="bold" view="p-20">
-          {state.total}
-        </Text>
-      </div>
+      {total !== 0 && (
+        <div className={styles['products__list-title']}>
+          <Text tag="h2" view="title-h2">
+            Total products
+          </Text>
+          <Text color="accent" weight="bold" view="p-20">
+            {total}
+          </Text>
+        </div>
+      )}
       <div className={styles.products__list}>
-        {state.items.map((product) => (
+        {productsList.map((product) => (
           <Card
             className={styles.products__card}
             image={product.images[0].url}
@@ -94,8 +82,13 @@ const ProductsList = () => {
           />
         ))}
       </div>
+      {!isAllProducts && (
+        <div className={styles['products__loader-wrapper']} ref={loaderRef}>
+          <Loader className={styles.products__loader} />
+        </div>
+      )}
     </div>
   );
-};
+});
 
 export default ProductsList;

@@ -1,7 +1,7 @@
 @use '@styles/mixins' as *;
 
 .products {
-  margin-top: 100px;
+  margin-block: 100px;
 
   &__text {
     display: flex;
@@ -41,6 +41,10 @@
   &__loader {
     display: block;
     margin-inline: auto;
+
+    &-wrapper {
+      margin-top: 50px;
+    }
   }
 
   &__error {
