@@ -1,9 +1,11 @@
 import { getProducts, type ProductType } from 'api/products.api';
-import { makeAutoObservable, runInAction } from 'mobx';
+import { action, makeAutoObservable, runInAction } from 'mobx';
 
 class ProductsStore {
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      loadProducts: action.bound,
+    });
   }
 
   private _isLoading: boolean = false;
@@ -38,12 +40,10 @@ class ProductsStore {
   async loadProducts(): Promise<void> {
     if (this._isLoading || this._isAllProducts) return;
 
-    try {
-      runInAction(() => {
-        this._isLoading = true;
-        this._error = null;
-      });
+    this._isLoading = true;
+    this._error = null;
 
+    try {
       const response = await getProducts(this._page);
 
       runInAction(() => {

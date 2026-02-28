@@ -34,6 +34,22 @@
     }
   }
 
+  &__query {
+    margin-bottom: $space-xl;
+
+    &-search {
+      display: flex;
+      gap: $space-m;
+
+      @include respond(sm) {
+        gap: $space-s;
+      }
+    }
+    &-search-input {
+      flex-grow: 1;
+    }
+  }
+
   &__card {
     margin-inline: auto;
   }
