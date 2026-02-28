@@ -19,14 +19,16 @@ const router = createBrowserRouter([
       {
         path: routerData.products.href,
         element: <Products />,
-        // loader: ({ request }) => {
-        //   const url = new URL(request.url);
-        //   const title = url.searchParams.get('title');
+        loader: ({ request }) => {
+          const url = new URL(request.url);
+          const title = url.searchParams.get('title');
 
-        //   console.log(title);
+          console.log(title);
 
-        //   productsStore.loadProducts(title);
-        // },
+          productsStore.searchProducts();
+
+          productsStore.loadProducts(title);
+        },
       },
       {
         path: routerData.product.href,

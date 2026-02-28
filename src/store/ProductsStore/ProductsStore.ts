@@ -20,6 +20,9 @@ class ProductsStore {
   get error(): string | null {
     return this._error;
   }
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
   get productsList(): ProductType[] {
     return this._productsList;
   }
@@ -35,6 +38,13 @@ class ProductsStore {
 
   incrementPage(): void {
     this._page++;
+  }
+
+  searchProducts() {
+    this._productsList = [];
+    this._total = 0;
+    this._page = 1;
+    this._isAllProducts = false;
   }
 
   async loadProducts(titleQuery: string | null): Promise<void> {

@@ -14,7 +14,7 @@ import { useEffect, useRef } from 'react';
 import Input from 'components/Input';
 
 const ProductsList = observer(() => {
-  const { productsList, total, error, isAllProducts, loadProducts } =
+  const { productsList, total, error, isAllProducts, isLoading, loadProducts } =
     productsStore;
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
@@ -56,18 +56,18 @@ const ProductsList = observer(() => {
 
   return (
     <>
+      <Form className={styles['products__query']}>
+        <div className={styles['products__query-search']}>
+          <Input
+            className={styles['products__query-search-input']}
+            placeholder="Search product"
+            name="title"
+          />
+          <Button type="submit">Find now</Button>
+        </div>
+      </Form>
       {productsList.length !== 0 && (
         <>
-          <Form className={styles['products__query']}>
-            <div className={styles['products__query-search']}>
-              <Input
-                className={styles['products__query-search-input']}
-                placeholder="Search product"
-                name="title"
-              />
-              <Button type="submit">Find now</Button>
-            </div>
-          </Form>
           <div className={styles['products__list-title']}>
             <Text tag="h2" view="title-h2">
               Total products
@@ -101,6 +101,9 @@ const ProductsList = observer(() => {
             })}
           </div>
         </>
+      )}
+      {productsList.length === 0 && !isLoading && (
+        <ErrorApiMessage error="Ничего не найдено" />
       )}
       {!isAllProducts && (
         <div className={styles['products__loader-wrapper']} ref={loaderRef}>
