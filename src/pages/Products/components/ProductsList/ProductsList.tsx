@@ -4,11 +4,11 @@ import styles from '../../Products.module.scss';
 import Text from 'components/Text';
 import Card from 'components/Card';
 import Button from 'components/Button';
-import { Form, useNavigate } from 'react-router';
+import { Form, useNavigate, useSearchParams } from 'react-router';
 import routerData from 'config/routerData';
 import Loader from 'components/Loader';
 import ErrorApiMessage from 'components/ErrorApiMessage';
-import productsStore from 'store/ProductsStore/ProductsStore';
+import productsStore from 'store/ProductsStore';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
 import Input from 'components/Input';
@@ -19,12 +19,15 @@ const ProductsList = observer(() => {
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
+  const [searchParams] = useSearchParams();
+  const title = searchParams.get('title');
+
   useEffect(() => {
-    loadProducts();
+    loadProducts(title);
 
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        loadProducts();
+        loadProducts(title);
       }
     });
 
@@ -35,7 +38,7 @@ const ProductsList = observer(() => {
     return () => {
       obs.disconnect();
     };
-  }, []);
+  }, [loadProducts, title]);
 
   const navigate = useNavigate();
 
@@ -55,12 +58,12 @@ const ProductsList = observer(() => {
     <>
       {productsList.length !== 0 && (
         <>
-          {/* https://front-school-strapi.ktsdev.ru/api/products?populate[0]=images&populate[1]=productCategory&filters[title][$containsi]=sleek */}
           <Form className={styles['products__query']}>
             <div className={styles['products__query-search']}>
               <Input
                 className={styles['products__query-search-input']}
                 placeholder="Search product"
+                name="title"
               />
               <Button type="submit">Find now</Button>
             </div>

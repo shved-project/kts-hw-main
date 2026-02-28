@@ -37,14 +37,14 @@ class ProductsStore {
     this._page++;
   }
 
-  async loadProducts(): Promise<void> {
+  async loadProducts(titleQuery: string | null): Promise<void> {
     if (this._isLoading || this._isAllProducts) return;
 
     this._isLoading = true;
     this._error = null;
 
     try {
-      const response = await getProducts(this._page);
+      const response = await getProducts(this._page, titleQuery);
 
       runInAction(() => {
         this._productsList.push(...response.data);

@@ -5,6 +5,7 @@ import Product from 'pages/Product';
 import { createBrowserRouter } from 'react-router';
 import routerData from './routerData';
 import NotFound from 'pages/NotFound';
+import productsStore from 'store/ProductsStore';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,14 @@ const router = createBrowserRouter([
       {
         path: routerData.products.href,
         element: <Products />,
+        // loader: ({ request }) => {
+        //   const url = new URL(request.url);
+        //   const title = url.searchParams.get('title');
+
+        //   console.log(title);
+
+        //   productsStore.loadProducts(title);
+        // },
       },
       {
         path: routerData.product.href,
