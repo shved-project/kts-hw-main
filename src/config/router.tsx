@@ -23,9 +23,7 @@ const router = createBrowserRouter([
           const url = new URL(request.url);
           const title = url.searchParams.get('title');
 
-          console.log(title);
-
-          productsStore.searchProducts();
+          productsStore.resetSearch();
 
           productsStore.loadProducts(title);
         },

@@ -1,5 +1,14 @@
-import { getProducts, type ProductType } from 'api/products.api';
+import {
+  getProducts,
+  type ProductType,
+  type titleQueryType,
+} from 'api/products.api';
 import { action, makeAutoObservable, runInAction } from 'mobx';
+// 'Не удалось загрузить товары. Попробуйте позже'
+const ERROR_MESSAGES = {
+  apiError: 'Не удалось загрузить товары. Попробуйте позже',
+  emptyProductsList: 'Ничего не найдено',
+};
 
 class ProductsStore {
   constructor() {
@@ -40,14 +49,14 @@ class ProductsStore {
     this._page++;
   }
 
-  searchProducts() {
+  resetSearch() {
     this._productsList = [];
     this._total = 0;
     this._page = 1;
     this._isAllProducts = false;
   }
 
-  async loadProducts(titleQuery: string | null): Promise<void> {
+  async loadProducts(titleQuery: titleQueryType): Promise<void> {
     if (this._isLoading || this._isAllProducts) return;
 
     this._isLoading = true;
@@ -56,15 +65,21 @@ class ProductsStore {
     try {
       const response = await getProducts(this._page, titleQuery);
 
+      if (response.data.length === 0) {
+        runInAction(() => {
+          this._error = ERROR_MESSAGES.emptyProductsList;
+        });
+      }
+
       runInAction(() => {
         this._productsList.push(...response.data);
-        if (this.total === 0) this._total = response.meta.pagination.total;
+        this._total = response.meta.pagination.total;
         this.incrementPage();
         this._isAllProducts = this._productsList.length >= this.total;
       });
     } catch {
       runInAction(() => {
-        this._error = 'Не удалось загрузить товары. Попробуйте позже';
+        this._error = ERROR_MESSAGES.apiError;
       });
     } finally {
       runInAction(() => {

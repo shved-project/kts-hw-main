@@ -1,30 +1,32 @@
-// import { getProducts, type ProductType } from 'api/products.api';
-// import useResponse, { type effectFunctionType } from 'hooks/useResponse';
 import styles from '../../Products.module.scss';
 import Text from 'components/Text';
 import Card from 'components/Card';
 import Button from 'components/Button';
-import { Form, useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import routerData from 'config/routerData';
 import Loader from 'components/Loader';
 import ErrorApiMessage from 'components/ErrorApiMessage';
 import productsStore from 'store/ProductsStore';
 import { observer } from 'mobx-react-lite';
 import { useEffect, useRef } from 'react';
-import Input from 'components/Input';
 
 const ProductsList = observer(() => {
-  const { productsList, total, error, isAllProducts, isLoading, loadProducts } =
+  const { productsList, total, error, isAllProducts, loadProducts } =
     productsStore;
 
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const title = searchParams.get('title');
 
   useEffect(() => {
-    loadProducts(title);
+    if (title === '') {
+      searchParams.delete('title');
+      setSearchParams(searchParams);
+    }
+  }, [title, searchParams, setSearchParams]);
 
+  useEffect(() => {
     const obs = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         loadProducts(title);
@@ -41,7 +43,6 @@ const ProductsList = observer(() => {
   }, [loadProducts, title]);
 
   const navigate = useNavigate();
-
   const handleClickCard = (id: string) => {
     navigate(routerData.product.create(id));
   };
@@ -56,16 +57,6 @@ const ProductsList = observer(() => {
 
   return (
     <>
-      <Form className={styles['products__query']}>
-        <div className={styles['products__query-search']}>
-          <Input
-            className={styles['products__query-search-input']}
-            placeholder="Search product"
-            name="title"
-          />
-          <Button type="submit">Find now</Button>
-        </div>
-      </Form>
       {productsList.length !== 0 && (
         <>
           <div className={styles['products__list-title']}>
@@ -101,9 +92,6 @@ const ProductsList = observer(() => {
             })}
           </div>
         </>
-      )}
-      {productsList.length === 0 && !isLoading && (
-        <ErrorApiMessage error="Ничего не найдено" />
       )}
       {!isAllProducts && (
         <div className={styles['products__loader-wrapper']} ref={loaderRef}>
