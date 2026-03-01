@@ -48,6 +48,10 @@
     &-search-input {
       flex-grow: 1;
     }
+    &-filter {
+      max-width: 300px;
+      margin-top: $space-m;
+    }
   }
 
   &__card {

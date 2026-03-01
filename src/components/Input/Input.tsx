@@ -11,32 +11,31 @@ export type InputProps = Omit<
   afterSlot?: React.ReactNode;
 };
 
-const Input: React.FC<InputProps> = ({
-  value,
-  onChange,
-  afterSlot,
-  className,
-  ...rest
-}) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (onChange) {
-      onChange(e.target.value);
-    }
-  };
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ value, onChange, afterSlot, className, ...rest }, ref) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        onChange(e.target.value);
+      }
+    };
 
-  return (
-    <div className={classNames(styles.input__wrapper, className)}>
-      <input
-        type="text"
-        className={styles.input}
-        value={value}
-        onChange={handleChange}
-        style={{ paddingRight: afterSlot ? '44px' : 'auto' }}
-        {...rest}
-      />
-      {afterSlot && <div className={styles.input__icon}>{afterSlot}</div>}
-    </div>
-  );
-};
+    return (
+      <div className={classNames(styles.input__wrapper, className)}>
+        <input
+          ref={ref}
+          type="text"
+          className={styles.input}
+          value={value}
+          onChange={handleChange}
+          style={{ paddingRight: afterSlot ? '44px' : undefined }}
+          {...rest}
+        />
+        {afterSlot && <div className={styles.input__icon}>{afterSlot}</div>}
+      </div>
+    );
+  }
+);
+
+Input.displayName = 'Input';
 
 export default Input;

@@ -22,6 +22,9 @@ const router = createBrowserRouter([
         loader: ({ request }) => {
           const url = new URL(request.url);
           const title = url.searchParams.get('title');
+          const filters = url.searchParams.getAll('filters');
+
+          console.log(filters);
 
           productsStore.resetSearch();
 

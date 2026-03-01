@@ -34,6 +34,11 @@ export const getProducts = async (
         title: {
           $containsi: titleQuery,
         },
+        // productCategory: {
+        //   id: {
+        //     $eq: [42, 46],
+        //   },
+        // },
       },
     },
     { encodeValuesOnly: true }
