@@ -18,28 +18,15 @@ export type ProductType = {
   title: string;
 };
 
-export type titleQueryType = string | null;
-
 const PAGE_SIZE = 12;
 
 export const getProducts = async (
-  page: number,
-  titleQuery: titleQueryType
+  page: number
 ): Promise<ResponseType<ProductType[]>> => {
   const query = qs.stringify(
     {
       populate: ['images', 'productCategory'],
       pagination: { page: page, pageSize: PAGE_SIZE },
-      filters: {
-        title: {
-          $containsi: titleQuery,
-        },
-        // productCategory: {
-        //   id: {
-        //     $eq: [42, 46],
-        //   },
-        // },
-      },
     },
     { encodeValuesOnly: true }
   );

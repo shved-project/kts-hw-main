@@ -13,11 +13,11 @@ import { observer } from 'mobx-react-lite';
 const ProductCard = observer(() => {
   const { id } = useParams();
 
-  const { isLoading, error, product, loadProduct } = productDetailsStore;
-
   useEffect(() => {
-    loadProduct(id as string);
-  }, [id, loadProduct]);
+    productDetailsStore.loadProduct(id as string);
+  }, [id]);
+
+  const { isLoading, error, product } = productDetailsStore;
 
   if (isLoading) {
     return (

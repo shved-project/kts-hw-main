@@ -1,20 +1,9 @@
-import {
-  getProducts,
-  type ProductType,
-  type titleQueryType,
-} from 'api/products.api';
-import { action, makeAutoObservable, runInAction } from 'mobx';
-// 'Не удалось загрузить товары. Попробуйте позже'
-const ERROR_MESSAGES = {
-  apiError: 'Не удалось загрузить товары. Попробуйте позже',
-  emptyProductsList: 'Ничего не найдено',
-};
+import { getProducts, type ProductType } from 'api/products.api';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 class ProductsStore {
   constructor() {
-    makeAutoObservable(this, {
-      loadProducts: action.bound,
-    });
+    makeAutoObservable(this);
   }
 
   private _isLoading: boolean = false;
@@ -28,9 +17,6 @@ class ProductsStore {
 
   get error(): string | null {
     return this._error;
-  }
-  get isLoading(): boolean {
-    return this._isLoading;
   }
   get productsList(): ProductType[] {
     return this._productsList;
@@ -49,37 +35,26 @@ class ProductsStore {
     this._page++;
   }
 
-  resetSearch() {
-    this._productsList = [];
-    this._total = 0;
-    this._page = 1;
-    this._isAllProducts = false;
-  }
-
-  async loadProducts(titleQuery: titleQueryType): Promise<void> {
+  async loadProducts(): Promise<void> {
     if (this._isLoading || this._isAllProducts) return;
 
-    this._isLoading = true;
-    this._error = null;
-
     try {
-      const response = await getProducts(this._page, titleQuery);
+      runInAction(() => {
+        this._isLoading = true;
+        this._error = null;
+      });
 
-      if (response.data.length === 0) {
-        runInAction(() => {
-          this._error = ERROR_MESSAGES.emptyProductsList;
-        });
-      }
+      const response = await getProducts(this._page);
 
       runInAction(() => {
         this._productsList.push(...response.data);
-        this._total = response.meta.pagination.total;
+        if (this.total === 0) this._total = response.meta.pagination.total;
         this.incrementPage();
         this._isAllProducts = this._productsList.length >= this.total;
       });
     } catch {
       runInAction(() => {
-        this._error = ERROR_MESSAGES.apiError;
+        this._error = 'Не удалось загрузить товары. Попробуйте позже';
       });
     } finally {
       runInAction(() => {

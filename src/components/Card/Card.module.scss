@@ -3,7 +3,7 @@
 .card {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  max-width: 360px;
   cursor: pointer;
   overflow: hidden;
   transition: box-shadow $transition-duration $transition-timing-function;

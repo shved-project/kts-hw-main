@@ -1,6 +1,6 @@
 import { getProduct, type ProductType } from 'api/products.api';
 import axios from 'axios';
-import { action, makeAutoObservable, observable, runInAction } from 'mobx';
+import { makeAutoObservable, observable, runInAction } from 'mobx';
 
 type PriveteFields = '_product';
 
@@ -8,7 +8,6 @@ class ProductDetailsStore {
   constructor() {
     makeAutoObservable<this, PriveteFields>(this, {
       _product: observable.ref,
-      loadProduct: action.bound,
     });
   }
 

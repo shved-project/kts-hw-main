@@ -34,26 +34,6 @@
     }
   }
 
-  &__query {
-    margin-bottom: $space-xl;
-
-    &-search {
-      display: flex;
-      gap: $space-m;
-
-      @include respond(sm) {
-        gap: $space-s;
-      }
-    }
-    &-search-input {
-      flex-grow: 1;
-    }
-    &-filter {
-      max-width: 300px;
-      margin-top: $space-m;
-    }
-  }
-
   &__card {
     margin-inline: auto;
   }
