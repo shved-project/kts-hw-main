@@ -1,3 +1,4 @@
+import React from 'react';
 import { useParams } from 'react-router';
 import ProductInfo from '../ProductInfo';
 import SwiperImages from '../SwiperImages';
@@ -7,13 +8,12 @@ import styles from '../../Product.module.scss';
 import classNames from 'classnames';
 import ErrorApiMessage from 'components/ErrorApiMessage';
 import productDetailsStore from 'store/ProductDetailsStore';
-import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 const ProductCard = observer(() => {
   const { id } = useParams();
 
-  useEffect(() => {
+  React.useEffect(() => {
     productDetailsStore.loadProduct(id as string);
   }, [id]);
 
@@ -37,6 +37,10 @@ const ProductCard = observer(() => {
         className={styles['product__margin-top']}
       />
     );
+  }
+
+  if (!product) {
+    return null;
   }
 
   return (

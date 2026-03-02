@@ -1,5 +1,4 @@
-// import { getProducts, type ProductType } from 'api/products.api';
-// import useResponse, { type effectFunctionType } from 'hooks/useResponse';
+import React from 'react';
 import styles from '../../Products.module.scss';
 import Text from 'components/Text';
 import Card from 'components/Card';
@@ -10,14 +9,13 @@ import Loader from 'components/Loader';
 import ErrorApiMessage from 'components/ErrorApiMessage';
 import productsStore from 'store/ProductsStore/ProductsStore';
 import { observer } from 'mobx-react-lite';
-import { useEffect, useRef } from 'react';
 
 const ProductsList = observer(() => {
   const { productsList, total, error, isAllProducts } = productsStore;
 
-  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const loaderRef = React.useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     productsStore.loadProducts();
 
     const obs = new IntersectionObserver(([entry]) => {

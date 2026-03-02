@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ProductType } from 'api/products.api';
 import Text from 'components/Text';
 import styles from '../../Product.module.scss';
@@ -31,4 +32,4 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
   );
 };
 
-export default ProductInfo;
+export default React.memo(ProductInfo);
