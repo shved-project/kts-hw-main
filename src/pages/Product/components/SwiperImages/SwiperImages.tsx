@@ -1,7 +1,7 @@
+import React from 'react';
 import classNames from 'classnames';
 import styles from '../../Product.module.scss';
 import { Swiper, SwiperSlide, type SwiperRef } from 'swiper/react';
-import { useRef, useState } from 'react';
 import buttonArrowLeft from 'assets/icons/button-arrow-left.svg';
 import buttonArrowRight from 'assets/icons/button-arrow-right.svg';
 import { type ProductType } from 'api/products.api';
@@ -11,10 +11,10 @@ type SwiperImagesProps = {
 };
 
 const SwiperImages = ({ images }: SwiperImagesProps) => {
-  const [isBeginningSlide, setIsBeginningSlide] = useState(true);
-  const [isEndSlide, setIsEndSlide] = useState(false);
+  const [isBeginningSlide, setIsBeginningSlide] = React.useState(true);
+  const [isEndSlide, setIsEndSlide] = React.useState(false);
 
-  const swiperRef = useRef<SwiperRef | null>(null);
+  const swiperRef = React.useRef<SwiperRef | null>(null);
 
   const handleSlideChange = () => {
     if (swiperRef.current) {
@@ -68,4 +68,4 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
   );
 };
 
-export default SwiperImages;
+export default React.memo(SwiperImages);

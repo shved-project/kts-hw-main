@@ -1,15 +1,28 @@
+import React from 'react';
 import classNames from 'classnames';
 import styles from '../../Header.module.scss';
 
 type BurgerButtonProps = {
   isBurgerActive: boolean;
-  onClick: () => void;
+  setIsBurgerActive: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const BurgerButton: React.FC<BurgerButtonProps> = ({
   isBurgerActive,
-  onClick,
+  setIsBurgerActive,
 }) => {
+  React.useEffect(() => {
+    if (isBurgerActive) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [isBurgerActive]);
+
+  const handleBurgerClick = () => {
+    setIsBurgerActive((prev) => !prev);
+  };
+
   return (
     <button
       className={classNames(styles.header__burger, {
@@ -17,7 +30,7 @@ const BurgerButton: React.FC<BurgerButtonProps> = ({
       })}
       type="button"
       aria-label="burger-menu"
-      onClick={onClick}
+      onClick={handleBurgerClick}
     >
       <div className={styles['header__burger-item']}></div>
       <div className={styles['header__burger-item']}></div>

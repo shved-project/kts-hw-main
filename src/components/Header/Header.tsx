@@ -1,19 +1,19 @@
+import React from 'react';
 import Container from 'components/Container';
 import styles from './Header.module.scss';
 import { Link } from 'react-router';
 import headerNav from 'config/headerNav';
 import HeaderNavLink from './components/HeaderNavLink';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
 import UserLinks from './components/UserLinks';
 import BurgerButton from './components/BurgerButton';
 
 const Header = () => {
-  const [isBurgerActive, setIsBurgerActive] = useState(false);
+  const [isBurgerActive, setIsBurgerActive] = React.useState(false);
 
-  const headerNavWrapperRef = useRef<HTMLDivElement | null>(null);
+  const headerNavWrapperRef = React.useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleClickDocument = (event: MouseEvent) => {
       if (
         headerNavWrapperRef.current &&
@@ -29,18 +29,6 @@ const Header = () => {
       document.removeEventListener('click', handleClickDocument);
     };
   }, []);
-
-  useEffect(() => {
-    if (isBurgerActive) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }, [isBurgerActive]);
-
-  const handleBurgerClick = () => {
-    setIsBurgerActive((prev) => !prev);
-  };
 
   const handleLinkClick = () => {
     setIsBurgerActive(false);
@@ -77,7 +65,7 @@ const Header = () => {
           <UserLinks className={styles['header__user-desktop']} />
           <BurgerButton
             isBurgerActive={isBurgerActive}
-            onClick={handleBurgerClick}
+            setIsBurgerActive={setIsBurgerActive}
           />
         </div>
       </Container>

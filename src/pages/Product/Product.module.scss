@@ -121,6 +121,12 @@
         background: none;
         color: $color-text-secondary;
       }
+
+      &:disabled {
+        background-color: $color-bg-disabled;
+        border-color: $color-bg-disabled;
+        cursor: default;
+      }
     }
   }
 

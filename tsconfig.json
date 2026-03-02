@@ -13,7 +13,8 @@
       "utils": ["utils/*"],
       "assets": ["assets/*"],
       "api": ["api/*"],
-      "hooks": ["hooks/*"]
+      "hooks": ["hooks/*"],
+      "store": ["store/*"]
     }
   }
 }
