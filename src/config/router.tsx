@@ -2,6 +2,7 @@ import Home from 'pages/Home';
 import App from '../App';
 import Products from 'pages/Products';
 import Product from 'pages/Product';
+import Cart from 'pages/Cart';
 import { createBrowserRouter } from 'react-router';
 import routerData from './routerData';
 import NotFound from 'pages/NotFound';
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: routerData.product.href,
         element: <Product />,
+      },
+      {
+        path: routerData.cart.href,
+        element: <Cart />,
       },
     ],
   },

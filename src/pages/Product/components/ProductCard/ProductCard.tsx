@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useParams } from 'react-router';
 import ProductInfo from '../ProductInfo';
 import SwiperImages from '../SwiperImages';
@@ -7,19 +7,19 @@ import Loader from 'components/Loader';
 import styles from '../../Product.module.scss';
 import classNames from 'classnames';
 import ErrorApiMessage from 'components/ErrorApiMessage';
-import productDetailsStore from 'store/ProductDetailsStore';
+import { useProductDetailsStore } from 'store/locals/product-details';
 import { observer } from 'mobx-react-lite';
 
-const ProductCard = observer(() => {
+const ProductCard: React.FC = () => {
   const { id } = useParams();
+  const { hasInitiallyLoaded, error, product, loadProduct } =
+    useProductDetailsStore();
 
   React.useEffect(() => {
-    productDetailsStore.loadProduct(id as string);
-  }, [id]);
+    if (id) loadProduct(id);
+  }, [id, loadProduct]);
 
-  const { isLoading, error, product } = productDetailsStore;
-
-  if (isLoading) {
+  if (!hasInitiallyLoaded) {
     return (
       <Loader
         className={classNames(
@@ -49,6 +49,6 @@ const ProductCard = observer(() => {
       <ProductInfo product={product as ProductType} />
     </div>
   );
-});
+};
 
-export default ProductCard;
+export default observer(ProductCard);

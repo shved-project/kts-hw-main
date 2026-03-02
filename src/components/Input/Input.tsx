@@ -4,15 +4,14 @@ import classNames from 'classnames';
 
 export type InputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'onChange' | 'value'
+  'onChange'
 > & {
-  // value: string;
   onChange: (value: string) => void;
   afterSlot?: React.ReactNode;
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ onChange, afterSlot, className, ...rest }) => {
+  ({ onChange, afterSlot, className, value, ...rest }) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange(e.target.value);
     };
@@ -22,6 +21,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type="text"
           className={styles.input}
+          value={value}
           onChange={handleChange}
           style={{ paddingRight: afterSlot ? '44px' : 'auto' }}
           {...rest}

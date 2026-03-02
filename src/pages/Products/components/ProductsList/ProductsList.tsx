@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import styles from '../../Products.module.scss';
 import Text from 'components/Text';
 import Card from 'components/Card';
@@ -7,45 +7,69 @@ import { useNavigate } from 'react-router';
 import routerData from 'config/routerData';
 import Loader from 'components/Loader';
 import ErrorApiMessage from 'components/ErrorApiMessage';
-import productsStore from 'store/ProductsStore/ProductsStore';
+import { useProductsStore } from 'store/locals/products';
+import { useCartStore } from 'store/root';
 import { observer } from 'mobx-react-lite';
+import type { ProductType } from 'api/products.api';
 
-const ProductsList = observer(() => {
-  const { productsList, total, error, isAllProducts } = productsStore;
-
+const ProductsList: React.FC = () => {
+  const navigate = useNavigate();
   const loaderRef = React.useRef<HTMLDivElement | null>(null);
 
+  const {
+    productsList,
+    total,
+    error,
+    // hasInitiallyLoaded,
+    // isLoading,
+    isAllProducts,
+    loadProducts,
+    setupInfiniteScroll,
+  } = useProductsStore();
+  const { addItem, isInCart } = useCartStore();
+
   React.useEffect(() => {
-    productsStore.loadProducts();
+    loadProducts();
+    const cleanup = setupInfiniteScroll(loaderRef.current);
+    return () => cleanup();
+  }, [loadProducts, setupInfiniteScroll]);
 
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        productsStore.loadProducts();
-      }
-    });
+  const handleClickCard = React.useCallback(
+    (id: string) => {
+      navigate(routerData.product.create(id));
+    },
+    [navigate]
+  );
 
-    if (loaderRef.current) {
-      obs.observe(loaderRef.current);
-    }
-
-    return () => {
-      obs.disconnect();
-    };
-  }, []);
-
-  const navigate = useNavigate();
-
-  const handleClickCard = (id: string) => {
-    navigate(routerData.product.create(id));
-  };
-
-  const handleClickButton = (event: React.MouseEvent) => {
-    event.stopPropagation();
-  };
+  const handleClickButton = React.useCallback(
+    (event: React.MouseEvent, product: ProductType) => {
+      event.stopPropagation();
+      addItem(product);
+    },
+    [addItem]
+  );
 
   if (error) {
     return <ErrorApiMessage error={error} />;
   }
+
+  // if (!hasInitiallyLoaded) {
+  //   return (
+  //     <div className={styles['products__loader-wrapper']}>
+  //       <Loader className={styles.products__loader} />
+  //     </div>
+  //   );
+  // }
+
+  // if (productsList.length === 0 && !isLoading) {
+  //   return (
+  //     <div className={styles.products__empty}>
+  //       <Text view="p-20" color="secondary">
+  //         No products found. Try changing search or filter.
+  //       </Text>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div>
@@ -60,28 +84,35 @@ const ProductsList = observer(() => {
         </div>
       )}
       <div className={styles.products__list}>
-        {productsList.map((product) => {
-          const productId = product.documentId;
-          return (
-            <Card
-              className={styles.products__card}
-              image={product.images[0].url}
-              title={product.title}
-              subtitle={product.description}
-              captionSlot={product.productCategory.title}
-              actionSlot={
-                <Button onClick={handleClickButton}>Add to Cart</Button>
-              }
-              contentSlot={
-                <Text weight="bold" view="p-18">
-                  ${product.price}
-                </Text>
-              }
-              onClick={() => handleClickCard(productId)}
-              key={product.id}
-            />
-          );
-        })}
+        {productsList.map((product) => (
+          <Card
+            className={styles.products__card}
+            image={product.images[0].url}
+            title={product.title}
+            subtitle={product.description}
+            captionSlot={product.productCategory.title}
+            actionSlot={
+              <Button
+                onClick={(e) => handleClickButton(e, product)}
+                disabled={isInCart(product.documentId)}
+                className={
+                  isInCart(product.documentId)
+                    ? styles.products__button_in_cart
+                    : undefined
+                }
+              >
+                {isInCart(product.documentId) ? 'In Cart' : 'Add to Cart'}
+              </Button>
+            }
+            contentSlot={
+              <Text weight="bold" view="p-18">
+                ${product.price}
+              </Text>
+            }
+            onClick={() => handleClickCard(product.documentId)}
+            key={product.id}
+          />
+        ))}
       </div>
       {!isAllProducts && (
         <div className={styles['products__loader-wrapper']} ref={loaderRef}>
@@ -90,6 +121,6 @@ const ProductsList = observer(() => {
       )}
     </div>
   );
-});
+};
 
-export default ProductsList;
+export default observer(ProductsList);

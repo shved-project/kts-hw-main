@@ -18,15 +18,37 @@ export type ProductType = {
   title: string;
 };
 
+export type ProductCategoryType = {
+  id: number;
+  documentId: string;
+  title: string;
+};
+
 const PAGE_SIZE = 12;
 
+export type GetProductsParams = {
+  page: number;
+  search?: string;
+  categoryId?: number;
+};
+
 export const getProducts = async (
-  page: number
+  params: GetProductsParams
 ): Promise<ResponseType<ProductType[]>> => {
+  const filters: Record<string, unknown> = {};
+
+  if (params.search?.trim()) {
+    filters.title = { $containsi: params.search.trim() };
+  }
+  if (params.categoryId != null) {
+    filters.productCategory = { id: { $eq: params.categoryId } };
+  }
+
   const query = qs.stringify(
     {
       populate: ['images', 'productCategory'],
-      pagination: { page: page, pageSize: PAGE_SIZE },
+      pagination: { page: params.page, pageSize: PAGE_SIZE },
+      ...(Object.keys(filters).length > 0 && { filters }),
     },
     { encodeValuesOnly: true }
   );
@@ -35,6 +57,12 @@ export const getProducts = async (
 
   return data;
 };
+
+export const getProductCategories =
+  async (): Promise<ResponseType<ProductCategoryType[]>> => {
+    const { data } = await api.get('/product-categories');
+    return data;
+  };
 
 export const getProduct = async (id: string): Promise<ProductType> => {
   const query = qs.stringify(
