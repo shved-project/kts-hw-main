@@ -5,14 +5,21 @@ import Input from 'components/Input';
 import styles from '../../Products.module.scss';
 import Button from 'components/Button';
 import { useProductsStore } from 'store/locals/products';
+import classNames from 'classnames';
+import arrowDownIcon from 'assets/icons/arrow-down.svg';
 
 const ProductsFilters: React.FC = () => {
+  const multiDropdownRef = React.useRef<HTMLDivElement>(null);
+
   const [, setSearchParams] = useSearchParams();
   const {
     filtersStore: {
       search,
-      categoryId,
       categories,
+      isDropdownOpen,
+      setIsDropdownOpen,
+      currentCategoryTitle,
+      setCurrentCategoryTitle,
       setSearchAndApply,
       applySearch,
       applyCategory,
@@ -35,10 +42,25 @@ const ProductsFilters: React.FC = () => {
       cancelDebouncedApply();
     };
   }, [loadCategories, setSyncUrlCallback, syncUrl, cancelDebouncedApply]);
+  React.useEffect(() => {
+    const handleClickDocument = (event: MouseEvent) => {
+      if (
+        multiDropdownRef.current &&
+        !multiDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickDocument);
+
+    return () => {
+      document.removeEventListener('click', handleClickDocument);
+    };
+  }, []);
 
   const handleCategoryChange = React.useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const id = e.target.value ? Number(e.target.value) : null;
+    (id: number | null) => {
       applyCategory(id);
       syncUrl();
     },
@@ -49,6 +71,19 @@ const ProductsFilters: React.FC = () => {
     applySearch();
     syncUrl();
   }, [applySearch, syncUrl]);
+
+  const handleOpenDropdown = React.useCallback(() => {
+    setIsDropdownOpen(true);
+  }, [setIsDropdownOpen]);
+
+  const handleClickOption = React.useCallback(
+    (id: number | null, title: string) => {
+      handleCategoryChange(id);
+      setCurrentCategoryTitle(title);
+      setIsDropdownOpen(false);
+    },
+    [handleCategoryChange, setIsDropdownOpen, setCurrentCategoryTitle]
+  );
 
   return (
     <div className={styles.products__form}>
@@ -62,22 +97,38 @@ const ProductsFilters: React.FC = () => {
         <Button onClick={handleFindNow}>Find now</Button>
       </div>
       <div className={styles['products__filter-wrapper']}>
-        <label htmlFor="category-filter" className={styles.products__filter_label}>
-          Category:
-        </label>
-        <select
-          id="category-filter"
-          className={styles.products__filter_select}
-          onChange={handleCategoryChange}
-          value={categoryId ?? ''}
+        <div
+          className={styles['products__filter-dropdown-wrapper']}
+          ref={multiDropdownRef}
         >
-          <option value="">All categories</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.title}
-            </option>
-          ))}
-        </select>
+          <Input
+            value={''}
+            onClick={handleOpenDropdown}
+            placeholder={currentCategoryTitle}
+            afterSlot={<img src={arrowDownIcon} alt="arrow down" />}
+          />
+          <div
+            className={classNames(styles['products__filter-dropdown'], {
+              [styles['products__filter-dropdown--open']]: isDropdownOpen,
+            })}
+          >
+            <div
+              className={styles['products__filter-dropdown-option']}
+              onClick={() => handleClickOption(null, 'All categories')}
+            >
+              All categories
+            </div>
+            {categories.map((cat) => (
+              <div
+                className={styles['products__filter-dropdown-option']}
+                key={cat.id}
+                onClick={() => handleClickOption(+cat.id, cat.title)}
+              >
+                {cat.title}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

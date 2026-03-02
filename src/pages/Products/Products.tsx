@@ -6,10 +6,7 @@ import styles from './Products.module.scss';
 import ProductsText from './components/ProductsText';
 import ProductsList from './components/ProductsList';
 import ProductsFilters from './components/ProductsFilters';
-import {
-  ProductsStoreProvider,
-  ProductsStore,
-} from 'store/locals/products';
+import { ProductsStoreProvider, ProductsStore } from 'store/locals/products';
 import { useLocalStore } from 'store/hooks';
 
 const QUERY_SEARCH = 'search';

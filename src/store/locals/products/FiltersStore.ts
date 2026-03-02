@@ -20,7 +20,12 @@ type ProductsStoreRef = {
   resetAndLoad: () => void;
 };
 
-type PrivateFields = '_search' | '_categoryId' | '_categories';
+type PrivateFields =
+  | '_search'
+  | '_categoryId'
+  | '_categories'
+  | '_currentCategoryTitle'
+  | '_isDropdownOpen';
 
 export type QueryParams = Record<string, string>;
 
@@ -44,14 +49,20 @@ export class FiltersStore implements ILocalStore {
       _search: observable,
       _categoryId: observable,
       _categories: observable,
+      _currentCategoryTitle: observable,
+      _isDropdownOpen: observable,
       search: computed,
       categoryId: computed,
       categories: computed,
+      currentCategoryTitle: computed,
+      isDropdownOpen: computed,
       setSearch: action,
       setCategoryId: action,
+      setIsDropdownOpen: action,
       loadCategories: action,
       applySearch: action,
       applyCategory: action,
+      setCurrentCategoryTitle: action,
       setSearchAndApply: action,
       destroy: action,
     });
@@ -60,6 +71,8 @@ export class FiltersStore implements ILocalStore {
   private _search = '';
   private _categoryId: number | null = null;
   private _categories: ProductCategoryType[] = [];
+  private _currentCategoryTitle: string = 'All categories';
+  private _isDropdownOpen: boolean = false;
 
   get search(): string {
     return this._search;
@@ -72,6 +85,22 @@ export class FiltersStore implements ILocalStore {
   get categories(): ProductCategoryType[] {
     return this._categories;
   }
+
+  get currentCategoryTitle(): string {
+    return this._currentCategoryTitle;
+  }
+
+  get isDropdownOpen(): boolean {
+    return this._isDropdownOpen;
+  }
+
+  setCurrentCategoryTitle = (title: string): void => {
+    this._currentCategoryTitle = title;
+  };
+
+  setIsDropdownOpen = (isOpen: boolean): void => {
+    this._isDropdownOpen = isOpen;
+  };
 
   setSearch = (value: string): void => {
     this._search = value;
@@ -126,5 +155,7 @@ export class FiltersStore implements ILocalStore {
     this._search = '';
     this._categoryId = null;
     this._categories = [];
+    this._currentCategoryTitle = 'All categories';
+    this._isDropdownOpen = false;
   };
 }

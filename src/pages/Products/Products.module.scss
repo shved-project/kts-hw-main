@@ -95,4 +95,37 @@
     font-size: 16px;
     min-width: 180px;
   }
+
+  &__filter-dropdown {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    top: calc(100% + $space-xs);
+    left: 0;
+    right: 0;
+    background-color: $color-bg-block-primary;
+
+    &--open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &-option {
+      padding: 14px 12px;
+      cursor: pointer;
+
+      &:not(.multi-dropdown__option--selected):hover {
+        color: #afadb5;
+      }
+
+      &--selected {
+        color: var(--color-text-accent);
+        cursor: default;
+      }
+    }
+
+    &-wrapper {
+      position: relative;
+    }
+  }
 }

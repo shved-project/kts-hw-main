@@ -58,11 +58,12 @@ export const getProducts = async (
   return data;
 };
 
-export const getProductCategories =
-  async (): Promise<ResponseType<ProductCategoryType[]>> => {
-    const { data } = await api.get('/product-categories');
-    return data;
-  };
+export const getProductCategories = async (): Promise<
+  ResponseType<ProductCategoryType[]>
+> => {
+  const { data } = await api.get('/product-categories');
+  return data;
+};
 
 export const getProduct = async (id: string): Promise<ProductType> => {
   const query = qs.stringify(

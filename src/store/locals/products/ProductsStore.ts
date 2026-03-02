@@ -12,12 +12,12 @@ import { FiltersStore } from './FiltersStore';
 
 type PrivateFields =
   | '_isLoading'
-  | '_hasInitiallyLoaded'
   | '_error'
   | '_productsList'
   | '_total'
   | '_page'
-  | '_isAllProducts';
+  | '_isAllProducts'
+  | '_isEmptySearchResult';
 
 export class ProductsStore implements ILocalStore {
   readonly filtersStore: FiltersStore;
@@ -26,19 +26,19 @@ export class ProductsStore implements ILocalStore {
     this.filtersStore = new FiltersStore(this);
     makeObservable<this, PrivateFields>(this, {
       _isLoading: observable,
-      _hasInitiallyLoaded: observable,
       _error: observable,
       _productsList: observable,
       _total: observable,
       _page: observable,
       _isAllProducts: observable,
+      _isEmptySearchResult: observable,
       error: computed,
       isLoading: computed,
-      hasInitiallyLoaded: computed,
       productsList: computed,
       page: computed,
       total: computed,
       isAllProducts: computed,
+      isEmptySearchResult: computed,
       incrementPage: action,
       resetAndLoad: action,
       loadProducts: action,
@@ -47,11 +47,11 @@ export class ProductsStore implements ILocalStore {
     });
   }
 
-  private _isLoading: boolean = true;
-  private _hasInitiallyLoaded: boolean = false;
+  private _isLoading: boolean = false;
   private _error: string | null = null;
   private _productsList: ProductType[] = [];
   private _total: number = 0;
+  private _isEmptySearchResult: boolean = false;
 
   private _page: number = 1;
 
@@ -62,9 +62,6 @@ export class ProductsStore implements ILocalStore {
   }
   get isLoading(): boolean {
     return this._isLoading;
-  }
-  get hasInitiallyLoaded(): boolean {
-    return this._hasInitiallyLoaded;
   }
   get productsList(): ProductType[] {
     return this._productsList;
@@ -78,6 +75,9 @@ export class ProductsStore implements ILocalStore {
   get isAllProducts(): boolean {
     return this._isAllProducts;
   }
+  get isEmptySearchResult(): boolean {
+    return this._isEmptySearchResult;
+  }
 
   incrementPage = (): void => {
     this._page++;
@@ -89,7 +89,6 @@ export class ProductsStore implements ILocalStore {
       this._page = 1;
       this._total = 0;
       this._isAllProducts = false;
-      this._hasInitiallyLoaded = false;
     });
     this.loadProducts(true);
   };
@@ -119,12 +118,11 @@ export class ProductsStore implements ILocalStore {
         this._page++;
         this._isAllProducts =
           this._productsList.length >= response.meta.pagination.total;
-        this._hasInitiallyLoaded = true;
+        this._isEmptySearchResult = response.data.length === 0;
       });
     } catch {
       runInAction(() => {
         this._error = 'Не удалось загрузить товары. Попробуйте позже';
-        this._hasInitiallyLoaded = true;
       });
     } finally {
       runInAction(() => {
@@ -134,7 +132,11 @@ export class ProductsStore implements ILocalStore {
   };
 
   setupInfiniteScroll = (element: HTMLElement | null): (() => void) => {
-    return setupInfiniteScrollUtil(element, this.loadProducts);
+    return setupInfiniteScrollUtil(
+      element,
+      this.loadProducts,
+      () => this._page === 1
+    );
   };
 
   destroy = (): void => {
@@ -142,9 +144,9 @@ export class ProductsStore implements ILocalStore {
     this._productsList = [];
     this._error = null;
     this._isLoading = false;
-    this._hasInitiallyLoaded = false;
     this._page = 1;
     this._total = 0;
     this._isAllProducts = false;
+    this._isEmptySearchResult = false;
   };
 }

@@ -20,11 +20,10 @@ const ProductsList: React.FC = () => {
     productsList,
     total,
     error,
-    // hasInitiallyLoaded,
-    // isLoading,
     isAllProducts,
     loadProducts,
     setupInfiniteScroll,
+    isEmptySearchResult,
   } = useProductsStore();
   const { addItem, isInCart } = useCartStore();
 
@@ -53,23 +52,15 @@ const ProductsList: React.FC = () => {
     return <ErrorApiMessage error={error} />;
   }
 
-  // if (!hasInitiallyLoaded) {
-  //   return (
-  //     <div className={styles['products__loader-wrapper']}>
-  //       <Loader className={styles.products__loader} />
-  //     </div>
-  //   );
-  // }
-
-  // if (productsList.length === 0 && !isLoading) {
-  //   return (
-  //     <div className={styles.products__empty}>
-  //       <Text view="p-20" color="secondary">
-  //         No products found. Try changing search or filter.
-  //       </Text>
-  //     </div>
-  //   );
-  // }
+  if (isEmptySearchResult) {
+    return (
+      <div className={styles.products__empty}>
+        <Text view="p-20" color="secondary">
+          No products found. Try changing search or filter.
+        </Text>
+      </div>
+    );
+  }
 
   return (
     <div>
