@@ -4,10 +4,10 @@ import styles from '../../Products.module.scss';
 const ProductsText = () => {
   return (
     <div className={styles.products__text}>
-      <Text view="title" tag="h1">
+      <Text tag="h1" view="title">
         Products
       </Text>
-      <Text color="secondary" view="p-20">
+      <Text view="p-20" color="secondary">
         We display products based on the latest products we have, if you want to
         see our old products please enter the name of the item
       </Text>
