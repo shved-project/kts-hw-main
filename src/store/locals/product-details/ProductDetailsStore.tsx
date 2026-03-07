@@ -1,4 +1,4 @@
-import { getProduct, type ProductType } from 'api/products.api';
+import { getProduct, type ProductType } from '@/api/products.api';
 import axios from 'axios';
 import {
   makeObservable,
@@ -7,9 +7,13 @@ import {
   action,
   runInAction,
 } from 'mobx';
-import type { ILocalStore } from 'store/interfaces';
+import type { ILocalStore } from '@/store/interfaces';
 
-type PrivateFields = '_isLoading' | '_hasInitiallyLoaded' | '_error' | '_product';
+type PrivateFields =
+  | '_isLoading'
+  | '_hasInitiallyLoaded'
+  | '_error'
+  | '_product';
 
 export class ProductDetailsStore implements ILocalStore {
   constructor() {

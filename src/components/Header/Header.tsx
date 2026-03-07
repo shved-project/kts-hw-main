@@ -1,12 +1,15 @@
+'use client';
+
 import React from 'react';
-import Container from 'components/Container';
+import Container from '@/components/Container';
 import styles from './Header.module.scss';
-import { Link } from 'react-router';
-import headerNav from 'config/headerNav';
+import headerNav from '@/config/headerNav';
 import HeaderNavLink from './components/HeaderNavLink';
 import classNames from 'classnames';
 import UserLinks from './components/UserLinks';
 import BurgerButton from './components/BurgerButton';
+import Link from 'next/link';
+import Image from 'next/image';
 
 const Header = () => {
   const [isBurgerActive, setIsBurgerActive] = React.useState(false);
@@ -38,8 +41,8 @@ const Header = () => {
     <header className={styles.header}>
       <Container className={styles.header__container}>
         <div className={styles.header__content}>
-          <Link to={'/'} onClick={handleLinkClick}>
-            <img src="/images/logo.svg" alt="Logo" />
+          <Link href={'/'} onClick={handleLinkClick}>
+            <Image src="/images/logo.svg" alt="Logo" width={130} height={42} />
           </Link>
           <div
             className={classNames(styles['header__nav-wrapper'], {

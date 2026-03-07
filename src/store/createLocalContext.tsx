@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 
 import type { ILocalStore } from './interfaces';
@@ -12,9 +14,7 @@ export const createLocalContext = <T extends ILocalStore>(
     store,
   }: React.PropsWithChildren<{ store: T }>) => {
     React.useEffect(() => () => store.destroy(), [store]);
-    return (
-      <Context.Provider value={store}>{children}</Context.Provider>
-    );
+    return <Context.Provider value={store}>{children}</Context.Provider>;
   };
 
   const useStore = () => {

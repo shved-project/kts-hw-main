@@ -1,0 +1,131 @@
+@use '@/styles/mixins' as *;
+
+.products {
+  margin-block: 100px;
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-m;
+    text-align: center;
+    max-width: 650px;
+    margin-inline: auto;
+    margin-bottom: 50px;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+
+    @include respond(md) {
+      grid-template-columns: 1fr 1fr;
+    }
+    @include respond(sm) {
+      grid-template-columns: 1fr;
+    }
+
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: $space-m;
+      margin-bottom: 35px;
+    }
+  }
+
+  &__card {
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  &__loader {
+    display: block;
+    margin-inline: auto;
+
+    &-wrapper {
+      margin-top: 50px;
+    }
+  }
+
+  &__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-xs;
+  }
+
+  &__form {
+    margin-bottom: $space-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $space-m;
+  }
+  &__input-wrappper {
+    display: flex;
+    gap: $space-m;
+  }
+  &__input {
+    flex-grow: 1;
+  }
+  &__filter-wrapper {
+    display: flex;
+    align-items: center;
+    gap: $space-xs;
+  }
+  &__filter_label {
+    font-size: 16px;
+    color: $color-text-primary;
+  }
+  &__button_in_cart {
+    background-color: $color-bg-disabled;
+    cursor: default;
+  }
+
+  &__empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  &__filter_select {
+    padding: 8px 12px;
+    border: 1px solid $color-text-secondary;
+    border-radius: 4px;
+    background-color: $color-bg-block-primary;
+    font-size: 16px;
+    min-width: 180px;
+  }
+
+  &__filter-dropdown {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    top: calc(100% + $space-xs);
+    left: 0;
+    right: 0;
+    background-color: $color-bg-block-primary;
+
+    &--open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    &-option {
+      padding: 14px 12px;
+      cursor: pointer;
+
+      &:not(.multi-dropdown__option--selected):hover {
+        color: #afadb5;
+      }
+
+      &--selected {
+        color: var(--color-text-accent);
+        cursor: default;
+      }
+    }
+
+    &-wrapper {
+      position: relative;
+    }
+  }
+}

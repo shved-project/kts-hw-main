@@ -1,13 +1,16 @@
-import Text from 'components/Text';
+'use client';
+
+import Text from '@/components/Text';
 import styles from './ButtonBack.module.scss';
-import arrowLeftIcon from 'assets/icons/arrow-left.svg';
-import { useNavigate } from 'react-router';
+import arrowLeftIcon from '@/assets/icons/arrow-left.svg';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const ButtonBack = () => {
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   const handleClick = () => {
-    navigate(-1);
+    navigate.back();
   };
 
   return (
@@ -16,7 +19,7 @@ const ButtonBack = () => {
       type="button"
       onClick={handleClick}
     >
-      <img src={arrowLeftIcon} alt="back" />
+      <Image src={arrowLeftIcon} alt="back" />
       <Text view="p-20">Back</Text>
     </button>
   );

@@ -2,7 +2,7 @@ import debounce from 'lodash.debounce';
 import {
   getProductCategories,
   type ProductCategoryType,
-} from 'api/products.api';
+} from '@/api/products.api';
 import {
   makeObservable,
   observable,
@@ -10,7 +10,7 @@ import {
   action,
   runInAction,
 } from 'mobx';
-import type { ILocalStore } from 'store/interfaces';
+import type { ILocalStore } from '@/store/interfaces';
 
 const DEBOUNCE_MS = 500;
 const QUERY_SEARCH = 'search';

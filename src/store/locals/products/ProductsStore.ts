@@ -1,4 +1,4 @@
-import { getProducts, type ProductType } from 'api/products.api';
+import { getProducts, type ProductType } from '@/api/products.api';
 import {
   makeObservable,
   observable,
@@ -6,7 +6,7 @@ import {
   action,
   runInAction,
 } from 'mobx';
-import type { ILocalStore } from 'store/interfaces';
+import type { ILocalStore } from '@/store/interfaces';
 import { setupInfiniteScroll as setupInfiniteScrollUtil } from './infiniteScroll';
 import { FiltersStore } from './FiltersStore';
 
@@ -143,7 +143,6 @@ export class ProductsStore implements ILocalStore {
     this.filtersStore.destroy();
     this._productsList = [];
     this._error = null;
-    this._isLoading = false;
     this._page = 1;
     this._total = 0;
     this._isAllProducts = false;

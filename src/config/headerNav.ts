@@ -1,4 +1,4 @@
-import routerData from 'config/routerData';
+import routerData from '@/config/routerData';
 
 export type HeaderNavType = {
   href: string;

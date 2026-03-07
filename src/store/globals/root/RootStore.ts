@@ -1,4 +1,4 @@
-import { CartStore } from 'store/globals/cart';
+import { CartStore } from '@/store/globals/cart';
 
 export interface IRootStore {
   readonly cartStore: CartStore;
