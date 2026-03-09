@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProductsStore } from '@/store/locals/products';
-import styles from '../../Products.module.scss';
+import styles from '../../../Products.module.scss';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
@@ -8,7 +8,7 @@ import Loader from '@/components/Loader';
 import { observer } from 'mobx-react-lite';
 
 const ProductsList = () => {
-  const { productsList, isAllLoadProducts, setupInfiniteScroll } =
+  const { productsList, total, isAllLoadProducts, setupInfiniteScroll } =
     useProductsStore();
 
   const loaderRef = React.useRef<HTMLDivElement | null>(null);
@@ -21,6 +21,16 @@ const ProductsList = () => {
 
   return (
     <>
+      {total !== 0 && (
+        <div className={styles['products__list-title']}>
+          <Text tag="h2" view="title-h2">
+            Total products
+          </Text>
+          <Text color="accent" weight="bold" view="p-20">
+            {total}
+          </Text>
+        </div>
+      )}
       <div className={styles.products__list}>
         {productsList.map((product) => (
           <Card

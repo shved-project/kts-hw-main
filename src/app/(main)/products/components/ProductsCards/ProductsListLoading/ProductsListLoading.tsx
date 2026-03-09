@@ -1,5 +1,5 @@
 import Loader from '@/components/Loader';
-import styles from '../../Products.module.scss';
+import styles from '../../../Products.module.scss';
 
 const ProductsListLoading = () => {
   return (

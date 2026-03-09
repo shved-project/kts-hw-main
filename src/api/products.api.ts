@@ -35,10 +35,17 @@ export type GetProductsParams = {
 export const getProducts = async (
   params: GetProductsParams
 ): Promise<ResponseType<ProductType[]>> => {
+  const filters: Record<string, unknown> = {};
+
+  if (params.search?.trim()) {
+    filters.title = { $containsi: params.search.trim() };
+  }
+
   const query = qs.stringify(
     {
       populate: ['images', 'productCategory'],
       pagination: { page: params.page, pageSize: PAGE_SIZE },
+      ...(Object.keys(filters).length > 0 && { filters }),
     },
     { encodeValuesOnly: true }
   );

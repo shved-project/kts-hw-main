@@ -15,6 +15,8 @@ type PrivateFields =
   | '_productsList'
   | '_isLoading'
   | '_page'
+  | '_searchParam'
+  | '_categoryParam'
   | '_total'
   | '_isAllLoadProducts';
 
@@ -23,6 +25,8 @@ export class ProductsStore implements ILocalStore {
     makeObservable<this, PrivateFields>(this, {
       _productsList: observable,
       _page: observable,
+      _searchParam: observable,
+      _categoryParam: observable,
       _total: observable,
       _isAllLoadProducts: observable,
       _isLoading: observable,
@@ -30,14 +34,21 @@ export class ProductsStore implements ILocalStore {
       _error: observable,
       productsList: computed,
       page: computed,
+      searchParam: computed,
+      categoryParam: computed,
       error: computed,
       loadProductsList: action.bound,
+      clearProductsList: action.bound,
       setupInfiniteScroll: action.bound,
+      setSearchParam: action.bound,
+      setCategoryParam: action.bound,
     });
   }
 
   private _productsList: ProductType[] = [];
   private _page: number = 1;
+  private _searchParam: string = '';
+  private _categoryParam: number | null = null;
   private _total: number = 0;
   private _isAllLoadProducts: boolean = false;
   private _isLoading: boolean = false;
@@ -49,6 +60,12 @@ export class ProductsStore implements ILocalStore {
   }
   get page(): number {
     return this._page;
+  }
+  get searchParam(): string {
+    return this._searchParam;
+  }
+  get categoryParam(): number | null {
+    return this._categoryParam;
   }
   get total(): number {
     return this._total;
@@ -65,11 +82,15 @@ export class ProductsStore implements ILocalStore {
 
   async loadProductsList(): Promise<void> {
     if (this._isAllLoadProducts || this._isLoading) return;
+
     this._isLoading = true;
     this._error = null;
 
     try {
-      const response = await getProducts({ page: this._page });
+      const response = await getProducts({
+        page: this._page,
+        search: this._searchParam,
+      });
 
       runInAction(() => {
         if (this._isInitLoading) {
@@ -90,13 +111,30 @@ export class ProductsStore implements ILocalStore {
     }
   }
 
+  clearProductsList() {
+    this._productsList = [];
+    this._page = 1;
+    this._total = 0;
+    this._isAllLoadProducts = false;
+    this._isInitLoading = true;
+  }
+
   setupInfiniteScroll(element: HTMLElement | null) {
     return setupInfiniteScrollUtil(element, () => this.loadProductsList());
+  }
+
+  setSearchParam(search: string) {
+    this._searchParam = search;
+  }
+  setCategoryParam(categoryId: number) {
+    this._categoryParam = categoryId;
   }
 
   destroy: VoidFunction = () => {
     this._productsList = [];
     this._page = 1;
+    this._searchParam = '';
+    this._categoryParam = null;
     this._total = 0;
     this._isAllLoadProducts = false;
     this._isLoading = false;
