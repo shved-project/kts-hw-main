@@ -7,13 +7,16 @@ import {
   runInAction,
 } from 'mobx';
 import type { ILocalStore } from '@/store/interfaces';
+import { setupInfiniteScroll as setupInfiniteScrollUtil } from './infiniteScroll';
 
 type PrivateFields =
-  | '_isLoading'
+  | '_isInitLoading'
   | '_error'
   | '_productsList'
+  | '_isLoading'
   | '_page'
-  | '_total';
+  | '_total'
+  | '_isAllLoadProducts';
 
 export class ProductsStore implements ILocalStore {
   constructor() {
@@ -21,20 +24,24 @@ export class ProductsStore implements ILocalStore {
       _productsList: observable,
       _page: observable,
       _total: observable,
+      _isAllLoadProducts: observable,
       _isLoading: observable,
+      _isInitLoading: observable,
       _error: observable,
       productsList: computed,
       page: computed,
-      isLoading: computed,
       error: computed,
       loadProductsList: action.bound,
+      setupInfiniteScroll: action.bound,
     });
   }
 
   private _productsList: ProductType[] = [];
   private _page: number = 1;
   private _total: number = 0;
-  private _isLoading: boolean = true;
+  private _isAllLoadProducts: boolean = false;
+  private _isLoading: boolean = false;
+  private _isInitLoading: boolean = true;
   private _error: string | null = null;
 
   get productsList(): ProductType[] {
@@ -46,41 +53,54 @@ export class ProductsStore implements ILocalStore {
   get total(): number {
     return this._total;
   }
-  get isLoading(): boolean {
-    return this._isLoading;
+  get isInitLoading(): boolean {
+    return this._isInitLoading;
+  }
+  get isAllLoadProducts(): boolean {
+    return this._isAllLoadProducts;
   }
   get error(): string | null {
     return this._error;
   }
 
   async loadProductsList(): Promise<void> {
+    if (this._isAllLoadProducts || this._isLoading) return;
     this._isLoading = true;
     this._error = null;
 
     try {
-      const response = await getProducts();
+      const response = await getProducts({ page: this._page });
 
       runInAction(() => {
-        this._productsList = response.data;
+        if (this._isInitLoading) {
+          this._isInitLoading = false;
+        }
+
+        this._productsList = [...this._productsList, ...response.data];
         this._page++;
         this._total = response.meta.pagination.total;
+        this._isAllLoadProducts = this._productsList.length >= this._total;
       });
     } catch {
       runInAction(() => {
         this._error = 'Не удалось загрузить товары. Попробуйте позже';
       });
     } finally {
-      runInAction(() => {
-        this._isLoading = false;
-      });
+      this._isLoading = false;
     }
+  }
+
+  setupInfiniteScroll(element: HTMLElement | null) {
+    return setupInfiniteScrollUtil(element, () => this.loadProductsList());
   }
 
   destroy: VoidFunction = () => {
     this._productsList = [];
     this._page = 1;
     this._total = 0;
-    this._isLoading = true;
+    this._isAllLoadProducts = false;
+    this._isLoading = false;
+    this._isInitLoading = true;
     this._error = null;
   };
   // readonly filtersStore: FiltersStore;

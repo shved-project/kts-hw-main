@@ -32,10 +32,13 @@ export type GetProductsParams = {
   categoryId?: number;
 };
 
-export const getProducts = async (): Promise<ResponseType<ProductType[]>> => {
+export const getProducts = async (
+  params: GetProductsParams
+): Promise<ResponseType<ProductType[]>> => {
   const query = qs.stringify(
     {
       populate: ['images', 'productCategory'],
+      pagination: { page: params.page, pageSize: PAGE_SIZE },
     },
     { encodeValuesOnly: true }
   );

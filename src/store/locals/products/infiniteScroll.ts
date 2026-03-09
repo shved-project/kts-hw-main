@@ -1,11 +1,10 @@
 export const setupInfiniteScroll = (
   element: HTMLElement | null,
-  onIntersect: () => void,
-  isInitLoad: () => boolean
+  onIntersect: () => void
 ): (() => void) => {
   if (!element) return () => {};
   const obs = new IntersectionObserver(([entry]) => {
-    if (entry?.isIntersecting && !isInitLoad()) {
+    if (entry?.isIntersecting) {
       onIntersect();
     }
   });
