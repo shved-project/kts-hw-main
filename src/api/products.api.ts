@@ -40,6 +40,9 @@ export const getProducts = async (
   if (params.search?.trim()) {
     filters.title = { $containsi: params.search.trim() };
   }
+  if (params.categoryId != null) {
+    filters.productCategory = { id: { $eq: params.categoryId } };
+  }
 
   const query = qs.stringify(
     {

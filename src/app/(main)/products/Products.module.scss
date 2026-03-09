@@ -80,16 +80,7 @@
     padding: 60px 20px;
   }
 
-  &__filter_select {
-    padding: 8px 12px;
-    border: 1px solid $color-text-secondary;
-    border-radius: 4px;
-    background-color: $color-bg-block-primary;
-    font-size: 16px;
-    min-width: 180px;
-  }
-
-  &__filter-dropdown {
+  &__category-dropdown {
     position: absolute;
     opacity: 0;
     pointer-events: none;
@@ -107,18 +98,18 @@
       padding: 14px 12px;
       cursor: pointer;
 
-      &:not(.multi-dropdown__option--selected):hover {
-        color: #afadb5;
+      &:not(.products__category-dropdown-option--selected):hover {
+        color: $color-text-secondary;
       }
 
       &--selected {
-        color: var(--color-text-accent);
-        cursor: default;
+        color: $color-text-accent;
       }
     }
 
     &-wrapper {
       position: relative;
+      max-width: 300px;
     }
   }
 }

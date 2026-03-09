@@ -1,4 +1,9 @@
-import { getProducts, type ProductType } from '@/api/products.api';
+import {
+  getProductCategories,
+  getProducts,
+  ProductCategoryType,
+  type ProductType,
+} from '@/api/products.api';
 import {
   makeObservable,
   observable,
@@ -17,9 +22,11 @@ type PrivateFields =
   | '_isEmptySearchResult'
   | '_page'
   | '_searchParam'
-  | '_categoryParam'
+  | '_currentCategory'
   | '_total'
-  | '_isAllLoadProducts';
+  | '_isAllLoadProducts'
+  | '_categories'
+  | '_isOpenCategoriesDropdown';
 
 export class ProductsStore implements ILocalStore {
   constructor() {
@@ -27,36 +34,43 @@ export class ProductsStore implements ILocalStore {
       _productsList: observable,
       _page: observable,
       _searchParam: observable,
-      _categoryParam: observable,
+      _currentCategory: observable,
       _total: observable,
       _isAllLoadProducts: observable,
       _isLoading: observable,
       _isInitLoading: observable,
       _isEmptySearchResult: observable,
       _error: observable,
+      _categories: observable,
+      _isOpenCategoriesDropdown: observable,
       productsList: computed,
       page: computed,
       searchParam: computed,
-      categoryParam: computed,
+      currentCategory: computed,
       error: computed,
       loadProductsList: action.bound,
       clearProductsList: action.bound,
       setupInfiniteScroll: action.bound,
       setSearchParam: action.bound,
-      setCategoryParam: action.bound,
+      setCurrentCategory: action.bound,
+      loadCategories: action.bound,
+      setOpenCategoriesDropdown: action.bound,
+      destroy: action.bound,
     });
   }
 
   private _productsList: ProductType[] = [];
   private _page: number = 1;
   private _searchParam: string = '';
-  private _categoryParam: number | null = null;
+  private _currentCategory: ProductCategoryType | null = null;
   private _total: number = 0;
   private _isAllLoadProducts: boolean = false;
   private _isLoading: boolean = false;
   private _isInitLoading: boolean = true;
   private _isEmptySearchResult: boolean = false;
   private _error: string | null = null;
+  private _categories: ProductCategoryType[] = [];
+  private _isOpenCategoriesDropdown: boolean = false;
 
   get productsList(): ProductType[] {
     return this._productsList;
@@ -67,8 +81,8 @@ export class ProductsStore implements ILocalStore {
   get searchParam(): string {
     return this._searchParam;
   }
-  get categoryParam(): number | null {
-    return this._categoryParam;
+  get currentCategory(): ProductCategoryType | null {
+    return this._currentCategory;
   }
   get total(): number {
     return this._total;
@@ -85,6 +99,12 @@ export class ProductsStore implements ILocalStore {
   get error(): string | null {
     return this._error;
   }
+  get categories(): ProductCategoryType[] {
+    return this._categories;
+  }
+  get isOpenCategoriesDropdown(): boolean {
+    return this._isOpenCategoriesDropdown;
+  }
 
   async loadProductsList(): Promise<void> {
     if (this._isAllLoadProducts || this._isLoading) return;
@@ -96,6 +116,7 @@ export class ProductsStore implements ILocalStore {
       const response = await getProducts({
         page: this._page,
         search: this._searchParam,
+        categoryId: this._currentCategory?.id,
       });
 
       runInAction(() => {
@@ -123,6 +144,13 @@ export class ProductsStore implements ILocalStore {
     }
   }
 
+  loadCategories = async (): Promise<void> => {
+    const res = await getProductCategories();
+    runInAction(() => {
+      this._categories = res.data;
+    });
+  };
+
   clearProductsList() {
     this._productsList = [];
     this._page = 1;
@@ -138,20 +166,26 @@ export class ProductsStore implements ILocalStore {
   setSearchParam(search: string) {
     this._searchParam = search;
   }
-  setCategoryParam(categoryId: number) {
-    this._categoryParam = categoryId;
+  setCurrentCategory(category: ProductCategoryType | null) {
+    this._currentCategory = category;
+  }
+
+  setOpenCategoriesDropdown(isOpen: boolean) {
+    this._isOpenCategoriesDropdown = isOpen;
   }
 
   destroy: VoidFunction = () => {
     this._productsList = [];
     this._page = 1;
     this._searchParam = '';
-    this._categoryParam = null;
+    this._currentCategory = null;
     this._total = 0;
     this._isAllLoadProducts = false;
     this._isInitLoading = true;
     this._isEmptySearchResult = false;
     this._error = null;
+    this._categories = [];
+    this._isOpenCategoriesDropdown = false;
   };
   // readonly filtersStore: FiltersStore;
 

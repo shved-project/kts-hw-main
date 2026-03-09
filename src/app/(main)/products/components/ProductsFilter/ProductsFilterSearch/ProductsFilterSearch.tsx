@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import Input from '@/components/Input';
 import { useProductsStore } from '@/store';
 import styles from '../../../Products.module.scss';
@@ -11,13 +11,13 @@ const ProductsFilterSearch = () => {
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
 
-  const handleClickButton = () => {
+  const handleClickButton = React.useCallback(() => {
     if (inputRef.current) {
       setSearchParam(inputRef.current?.value);
       clearProductsList();
       loadProductsList();
     }
-  };
+  }, [setSearchParam, clearProductsList, loadProductsList]);
 
   React.useEffect(() => {
     const handleClickEnter = (event: KeyboardEvent) => {
@@ -31,7 +31,7 @@ const ProductsFilterSearch = () => {
     return () => {
       document.removeEventListener('keydown', handleClickButton);
     };
-  }, [setSearchParam]);
+  }, [handleClickButton, setSearchParam]);
 
   return (
     <div className={styles['products__input-wrappper']}>
