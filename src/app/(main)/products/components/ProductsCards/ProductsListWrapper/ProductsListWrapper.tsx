@@ -6,10 +6,27 @@ import Loader from '@/components/Loader';
 import styles from '../../../Products.module.scss';
 import Text from '@/components/Text';
 import ErrorApiMessage from '@/components/ErrorApiMessage';
+import { useSearchParams } from 'next/navigation';
+import { PRODUCTS_CATEGORY, PRODUCTS_SEARCH } from '@/config/queryParams';
 
 const ProductsListWrapper = () => {
-  const { isInitLoading, error, isEmptySearchResult, loadProductsList } =
-    useProductsStore();
+  const {
+    isInitLoading,
+    error,
+    isEmptySearchResult,
+    loadProductsList,
+    setSearchParam,
+    setCurrentCategoryId,
+  } = useProductsStore();
+
+  const searchParams = useSearchParams();
+  const title = searchParams.get(PRODUCTS_SEARCH);
+  const categoryId = searchParams.get(PRODUCTS_CATEGORY);
+
+  React.useEffect(() => {
+    setSearchParam(title ?? '');
+    setCurrentCategoryId(categoryId ?? null);
+  }, [categoryId, setCurrentCategoryId, setSearchParam, title]);
 
   React.useEffect(() => {
     loadProductsList();

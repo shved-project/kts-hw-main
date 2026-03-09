@@ -22,7 +22,7 @@ type PrivateFields =
   | '_isEmptySearchResult'
   | '_page'
   | '_searchParam'
-  | '_currentCategory'
+  | '_currentCategoryId'
   | '_total'
   | '_isAllLoadProducts'
   | '_categories'
@@ -34,7 +34,7 @@ export class ProductsStore implements ILocalStore {
       _productsList: observable,
       _page: observable,
       _searchParam: observable,
-      _currentCategory: observable,
+      _currentCategoryId: observable,
       _total: observable,
       _isAllLoadProducts: observable,
       _isLoading: observable,
@@ -46,13 +46,13 @@ export class ProductsStore implements ILocalStore {
       productsList: computed,
       page: computed,
       searchParam: computed,
-      currentCategory: computed,
+      currentCategoryId: computed,
       error: computed,
       loadProductsList: action.bound,
       clearProductsList: action.bound,
       setupInfiniteScroll: action.bound,
       setSearchParam: action.bound,
-      setCurrentCategory: action.bound,
+      setCurrentCategoryId: action.bound,
       loadCategories: action.bound,
       setOpenCategoriesDropdown: action.bound,
       destroy: action.bound,
@@ -62,7 +62,7 @@ export class ProductsStore implements ILocalStore {
   private _productsList: ProductType[] = [];
   private _page: number = 1;
   private _searchParam: string = '';
-  private _currentCategory: ProductCategoryType | null = null;
+  private _currentCategoryId: string | null = null;
   private _total: number = 0;
   private _isAllLoadProducts: boolean = false;
   private _isLoading: boolean = false;
@@ -81,8 +81,8 @@ export class ProductsStore implements ILocalStore {
   get searchParam(): string {
     return this._searchParam;
   }
-  get currentCategory(): ProductCategoryType | null {
-    return this._currentCategory;
+  get currentCategoryId(): string | null {
+    return this._currentCategoryId;
   }
   get total(): number {
     return this._total;
@@ -116,7 +116,7 @@ export class ProductsStore implements ILocalStore {
       const response = await getProducts({
         page: this._page,
         search: this._searchParam,
-        categoryId: this._currentCategory?.id,
+        categoryId: this._currentCategoryId,
       });
 
       runInAction(() => {
@@ -166,8 +166,8 @@ export class ProductsStore implements ILocalStore {
   setSearchParam(search: string) {
     this._searchParam = search;
   }
-  setCurrentCategory(category: ProductCategoryType | null) {
-    this._currentCategory = category;
+  setCurrentCategoryId(category: string | null) {
+    this._currentCategoryId = category;
   }
 
   setOpenCategoriesDropdown(isOpen: boolean) {
@@ -178,7 +178,7 @@ export class ProductsStore implements ILocalStore {
     this._productsList = [];
     this._page = 1;
     this._searchParam = '';
-    this._currentCategory = null;
+    this._currentCategoryId = null;
     this._total = 0;
     this._isAllLoadProducts = false;
     this._isInitLoading = true;
@@ -187,132 +187,4 @@ export class ProductsStore implements ILocalStore {
     this._categories = [];
     this._isOpenCategoriesDropdown = false;
   };
-  // readonly filtersStore: FiltersStore;
-
-  // constructor() {
-  //   this.filtersStore = new FiltersStore(this);
-  //   makeObservable<this, PrivateFields>(this, {
-  //     _isLoading: observable,
-  //     _error: observable,
-  //     _productsList: observable,
-  //     _total: observable,
-  //     _page: observable,
-  //     _isAllProducts: observable,
-  //     _isEmptySearchResult: observable,
-  //     error: computed,
-  //     isLoading: computed,
-  //     productsList: computed,
-  //     page: computed,
-  //     total: computed,
-  //     isAllProducts: computed,
-  //     isEmptySearchResult: computed,
-  //     incrementPage: action,
-  //     resetAndLoad: action,
-  //     loadProducts: action,
-  //     setupInfiniteScroll: action,
-  //     destroy: action,
-  //   });
-  // }
-
-  // private _isLoading: boolean = false;
-  // private _error: string | null = null;
-  // private _productsList: ProductType[] = [];
-  // private _total: number = 0;
-  // private _isEmptySearchResult: boolean = false;
-
-  // private _page: number = 1;
-
-  // private _isAllProducts: boolean = false;
-
-  // get error(): string | null {
-  //   return this._error;
-  // }
-  // get isLoading(): boolean {
-  //   return this._isLoading;
-  // }
-  // get productsList(): ProductType[] {
-  //   return this._productsList;
-  // }
-  // get page(): number {
-  //   return this._page;
-  // }
-  // get total(): number {
-  //   return this._total;
-  // }
-  // get isAllProducts(): boolean {
-  //   return this._isAllProducts;
-  // }
-  // get isEmptySearchResult(): boolean {
-  //   return this._isEmptySearchResult;
-  // }
-
-  // incrementPage = (): void => {
-  //   this._page++;
-  // };
-
-  // resetAndLoad = (): void => {
-  //   runInAction(() => {
-  //     this._productsList = [];
-  //     this._page = 1;
-  //     this._total = 0;
-  //     this._isAllProducts = false;
-  //   });
-  //   this.loadProducts(true);
-  // };
-
-  // loadProducts = async (reset: boolean = false): Promise<void> => {
-  //   if (this._isLoading) return;
-  //   if (!reset && this._isAllProducts) return;
-
-  //   const { search, categoryId } = this.filtersStore;
-
-  //   this._isLoading = true;
-  //   this._error = null;
-  //   try {
-  //     const response = await getProducts({
-  //       page: this._page,
-  //       search: search || undefined,
-  //       categoryId: categoryId ?? undefined,
-  //     });
-
-  //     runInAction(() => {
-  //       if (reset) {
-  //         this._productsList = response.data;
-  //       } else {
-  //         this._productsList.push(...response.data);
-  //       }
-  //       this._total = response.meta.pagination.total;
-  //       this._page++;
-  //       this._isAllProducts =
-  //         this._productsList.length >= response.meta.pagination.total;
-  //       this._isEmptySearchResult = response.data.length === 0;
-  //     });
-  //   } catch {
-  //     runInAction(() => {
-  //       this._error = 'Не удалось загрузить товары. Попробуйте позже';
-  //     });
-  //   } finally {
-  //     runInAction(() => {
-  //       this._isLoading = false;
-  //     });
-  //   }
-  // };
-
-  // setupInfiniteScroll = (element: HTMLElement | null): (() => void) => {
-  //   return setupInfiniteScrollUtil(
-  //     element,
-  //     this.loadProducts,
-  //     () => this._page === 1
-  //   );
-  // };
-
-  // destroy = (): void => {
-  //   this.filtersStore.destroy();
-  //   this._productsList = [];
-  //   this._error = null;
-  //   this._page = 1;
-  //   this._total = 0;
-  //   this._isAllProducts = false;
-  //   this._isEmptySearchResult = false;
-  // };
 }

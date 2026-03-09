@@ -88,6 +88,7 @@
     left: 0;
     right: 0;
     background-color: $color-bg-block-primary;
+    transition: opacity $transition-duration $transition-timing-function;
 
     &--open {
       opacity: 1;

@@ -6,17 +6,23 @@ import arrowDownIcon from '@/assets/icons/arrow-down.svg';
 import { useProductsStore } from '@/store';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
-import { ProductCategoryType } from '@/api/products.api';
 
 const ProductsFilterCategory = () => {
   const {
     loadCategories,
     categories,
-    currentCategory,
-    setCurrentCategory,
+    currentCategoryId,
+    setCurrentCategoryId,
     setOpenCategoriesDropdown,
     isOpenCategoriesDropdown,
   } = useProductsStore();
+
+  const currentCategoryTitle = React.useMemo(
+    () =>
+      categories.find((category) => category.id === Number(currentCategoryId))
+        ?.title,
+    [categories, currentCategoryId]
+  );
 
   const multiDropdownRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -46,14 +52,14 @@ const ProductsFilterCategory = () => {
   }, [setOpenCategoriesDropdown, isOpenCategoriesDropdown]);
 
   const handleClickOption = React.useCallback(
-    (category: ProductCategoryType) => {
-      setCurrentCategory(category);
+    (categoryId: string) => {
+      setCurrentCategoryId(categoryId);
     },
-    [setCurrentCategory]
+    [setCurrentCategoryId]
   );
 
   const handleClickAllProducts = () => {
-    setCurrentCategory(null);
+    setCurrentCategoryId(null);
   };
 
   return (
@@ -62,27 +68,35 @@ const ProductsFilterCategory = () => {
       ref={multiDropdownRef}
     >
       <Input
-        value={currentCategory ? currentCategory.title : 'All categories'}
-        afterSlot={<Image src={arrowDownIcon} alt="arrow down" />}
+        value={currentCategoryTitle ? currentCategoryTitle : 'All categories'}
+        afterSlot={<Image src={arrowDownIcon} alt="" aria-hidden="true" />}
         onClick={handleClickInput}
+        role="combobox"
+        aria-expanded={isOpenCategoriesDropdown}
+        aria-controls="categories-dropdown"
+        aria-haspopup="listbox"
       />
       <div
         className={classNames(styles['products__category-dropdown'], {
           [styles['products__category-dropdown--open']]:
             isOpenCategoriesDropdown,
         })}
+        id="categories-dropdown"
+        role="listbox"
       >
         <div
           className={classNames(styles['products__category-dropdown-option'], {
             [styles['products__category-dropdown-option--selected']]:
-              currentCategory === null,
+              currentCategoryId === null,
           })}
           onClick={handleClickAllProducts}
+          role="option"
+          aria-selected={currentCategoryId === null}
         >
           All categories
         </div>
         {categories.map((cat) => {
-          const isCurrentCategory = cat.id === currentCategory?.id;
+          const isCurrentCategory = cat.id === Number(currentCategoryId);
 
           return (
             <div
@@ -94,7 +108,9 @@ const ProductsFilterCategory = () => {
                     isCurrentCategory,
                 }
               )}
-              onClick={() => handleClickOption(cat)}
+              onClick={() => handleClickOption(cat.id.toString())}
+              role="option"
+              aria-selected={isCurrentCategory}
             >
               {cat.title}
             </div>

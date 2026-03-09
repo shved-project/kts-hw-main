@@ -1,0 +1,4 @@
+const PRODUCTS_SEARCH = 'title';
+const PRODUCTS_CATEGORY = 'category';
+
+export { PRODUCTS_SEARCH, PRODUCTS_CATEGORY };

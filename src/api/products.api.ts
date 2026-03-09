@@ -29,7 +29,7 @@ const PAGE_SIZE = 12;
 export type GetProductsParams = {
   page: number;
   search?: string;
-  categoryId?: number;
+  categoryId?: string | null;
 };
 
 export const getProducts = async (
