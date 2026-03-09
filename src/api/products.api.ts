@@ -1,6 +1,7 @@
 import type { ResponseType } from './types/response.type';
 import { api } from './config.api';
 import qs from 'qs';
+import { BASE_URL } from '@/config/api';
 
 export type ProductType = {
   description: string;
@@ -57,31 +58,6 @@ export const getProducts = async (
 
   return data;
 };
-// export const getProducts = async (
-//   params: GetProductsParams
-// ): Promise<ResponseType<ProductType[]>> => {
-//   const filters: Record<string, unknown> = {};
-
-//   if (params.search?.trim()) {
-//     filters.title = { $containsi: params.search.trim() };
-//   }
-//   if (params.categoryId != null) {
-//     filters.productCategory = { id: { $eq: params.categoryId } };
-//   }
-
-//   const query = qs.stringify(
-//     {
-//       populate: ['images', 'productCategory'],
-//       pagination: { page: params.page, pageSize: PAGE_SIZE },
-//       ...(Object.keys(filters).length > 0 && { filters }),
-//     },
-//     { encodeValuesOnly: true }
-//   );
-
-//   const { data } = await api.get(`/products?${query}`);
-
-//   return data;
-// };
 
 export const getProductCategories = async (): Promise<
   ResponseType<ProductCategoryType[]>
@@ -96,7 +72,19 @@ export const getProduct = async (id: string): Promise<ProductType> => {
     { encodeValuesOnly: true }
   );
 
-  const { data } = await api.get(`/products/${id}?${query}`);
+  const res = await fetch(`${BASE_URL}/products/${id}?${query}`, {
+    cache: 'no-store',
+  });
 
-  return data.data;
+  if (res.status === 404) {
+    throw new Error('Товар не найден');
+  }
+
+  if (!res.ok) {
+    throw new Error('Произошла неизвестная ошибка. Попробуйте позже');
+  }
+
+  const { data } = await res.json();
+
+  return data;
 };
