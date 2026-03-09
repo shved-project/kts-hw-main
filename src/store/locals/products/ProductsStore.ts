@@ -14,6 +14,7 @@ type PrivateFields =
   | '_error'
   | '_productsList'
   | '_isLoading'
+  | '_isEmptySearchResult'
   | '_page'
   | '_searchParam'
   | '_categoryParam'
@@ -31,6 +32,7 @@ export class ProductsStore implements ILocalStore {
       _isAllLoadProducts: observable,
       _isLoading: observable,
       _isInitLoading: observable,
+      _isEmptySearchResult: observable,
       _error: observable,
       productsList: computed,
       page: computed,
@@ -53,6 +55,7 @@ export class ProductsStore implements ILocalStore {
   private _isAllLoadProducts: boolean = false;
   private _isLoading: boolean = false;
   private _isInitLoading: boolean = true;
+  private _isEmptySearchResult: boolean = false;
   private _error: string | null = null;
 
   get productsList(): ProductType[] {
@@ -72,6 +75,9 @@ export class ProductsStore implements ILocalStore {
   }
   get isInitLoading(): boolean {
     return this._isInitLoading;
+  }
+  get isEmptySearchResult(): boolean {
+    return this._isEmptySearchResult;
   }
   get isAllLoadProducts(): boolean {
     return this._isAllLoadProducts;
@@ -96,6 +102,11 @@ export class ProductsStore implements ILocalStore {
         if (this._isInitLoading) {
           this._isInitLoading = false;
         }
+        if (response.data.length === 0) {
+          this._isEmptySearchResult = true;
+        } else {
+          this._isEmptySearchResult = false;
+        }
 
         this._productsList = [...this._productsList, ...response.data];
         this._page++;
@@ -104,7 +115,8 @@ export class ProductsStore implements ILocalStore {
       });
     } catch {
       runInAction(() => {
-        this._error = 'Не удалось загрузить товары. Попробуйте позже';
+        this._isInitLoading = false;
+        this._error = 'Failed to load products. Please try again later.';
       });
     } finally {
       this._isLoading = false;
@@ -137,8 +149,8 @@ export class ProductsStore implements ILocalStore {
     this._categoryParam = null;
     this._total = 0;
     this._isAllLoadProducts = false;
-    this._isLoading = false;
     this._isInitLoading = true;
+    this._isEmptySearchResult = false;
     this._error = null;
   };
   // readonly filtersStore: FiltersStore;
