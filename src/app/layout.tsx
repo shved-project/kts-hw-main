@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import '@/styles/global.scss';
 import '@/config/configureMobX';
 import { RootStoreProvider } from '@/store';
+import ThemeInitializer from '@/components/ThemeInitializer/ThemeInitializer';
 
 export const metadata: Metadata = {
   title: {
@@ -76,7 +77,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={robotoFont.className}>
         <div id="root">
-          <RootStoreProvider>{children}</RootStoreProvider>
+          <RootStoreProvider>
+            <ThemeInitializer />
+            {children}
+          </RootStoreProvider>
         </div>
       </body>
     </html>
