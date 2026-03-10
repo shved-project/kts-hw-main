@@ -1,11 +1,6 @@
-import type { ProductType } from 'api/products.api';
-import {
-  makeObservable,
-  observable,
-  computed,
-  action,
-} from 'mobx';
-import type { IGlobalStore } from 'store/interfaces';
+import type { ProductType } from '@/api/products.api';
+import { makeObservable, observable, computed, action } from 'mobx';
+import type { IGlobalStore } from '@/store/interfaces';
 
 export type CartItemType = {
   product: ProductType;
@@ -52,9 +47,7 @@ export class CartStore implements IGlobalStore {
   }
 
   isInCart = (documentId: string): boolean => {
-    return this._items.some(
-      (item) => item.product.documentId === documentId
-    );
+    return this._items.some((item) => item.product.documentId === documentId);
   };
 
   addItem = (product: ProductType, quantity: number = 1): void => {
@@ -75,16 +68,12 @@ export class CartStore implements IGlobalStore {
   };
 
   increaseQuantity = (documentId: string): void => {
-    const item = this._items.find(
-      (i) => i.product.documentId === documentId
-    );
+    const item = this._items.find((i) => i.product.documentId === documentId);
     if (item) item.quantity++;
   };
 
   decreaseQuantity = (documentId: string): void => {
-    const item = this._items.find(
-      (i) => i.product.documentId === documentId
-    );
+    const item = this._items.find((i) => i.product.documentId === documentId);
     if (!item) return;
     item.quantity = Math.max(0, item.quantity - 1);
     if (item.quantity === 0) {

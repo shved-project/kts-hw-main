@@ -1,10 +1,9 @@
-@use '@styles/mixins' as *;
+@use '@/styles/mixins' as *;
 
 .header {
   position: relative;
   height: $header-height;
   background-color: $color-bg-block-primary;
-  border-bottom: 2px solid #f3f3f3;
   z-index: $z-50;
 
   &__container {
@@ -166,6 +165,10 @@
     align-items: center;
     gap: $space-m;
 
+    :global([data-theme='dark']) & img {
+      filter: invert(1);
+    }
+
     &-desktop {
       @include respond(md) {
         display: none;
@@ -231,6 +234,41 @@
           rotate: -45deg;
         }
       }
+    }
+  }
+
+  &__toggle_theme {
+    &_button {
+      background: none;
+      border: none;
+    }
+
+    &_wrapper {
+      position: relative;
+      width: 40px;
+      height: 26px;
+      border: 2px solid $color-text-primary;
+      border-radius: 20px;
+    }
+    &_thumb {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(0);
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      transition: all $transition-duration $transition-timing-function;
+
+      &--active {
+        left: 100%;
+        transform: translateX(-100%);
+      }
+    }
+    &_icon {
+      display: block;
     }
   }
 }

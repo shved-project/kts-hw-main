@@ -1,0 +1,143 @@
+@use '@/styles/mixins' as *;
+
+.product {
+  margin-bottom: $space-xl;
+  margin-top: 60px;
+
+  &__content {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-xl;
+    margin-top: $space-l;
+
+    @include respond(md) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  &__swiper {
+    position: relative;
+    aspect-ratio: 1/1;
+    flex-basis: 50%;
+    flex-shrink: 0;
+    min-width: 0;
+    min-height: 0;
+
+    @include respond(lg) {
+      flex-basis: 350px;
+    }
+    @include respond(md) {
+      flex-basis: auto;
+      width: 100%;
+      max-width: 600px;
+      margin-inline: auto;
+    }
+
+    &-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: $z-10;
+      width: 64px;
+      height: 64px;
+      background-color: #000000;
+      border-radius: 50%;
+      transition: background-color $transition-duration
+        $transition-timing-function;
+
+      @include respond(sm) {
+        width: 50px;
+        height: 50px;
+      }
+
+      &-prev {
+        left: $space-m;
+
+        @include respond(sm) {
+          left: $space-xs;
+        }
+      }
+
+      &-next {
+        right: $space-m;
+
+        @include respond(sm) {
+          right: $space-xs;
+        }
+      }
+
+      &-disabled {
+        cursor: default;
+        background-color: #00000093;
+      }
+    }
+  }
+
+  .swiper {
+    height: 100%;
+  }
+
+  &__info {
+    flex-basis: 100%;
+
+    &-text {
+      margin-bottom: 56px;
+    }
+    &-title {
+      margin-bottom: $space-m;
+    }
+    &-price {
+      margin-bottom: $space-xl;
+    }
+    &-buttons {
+      display: flex;
+      gap: $space-xl;
+
+      @include respond(md) {
+        gap: $space-m;
+      }
+      @include respond(sm) {
+        justify-content: space-between;
+      }
+    }
+    &-button-cart {
+      background: none;
+      color: $color-text-primary;
+      border: 1px solid $color-text-secondary;
+      transition: $transition-duration $transition-timing-function;
+
+      &:not(:disabled):hover {
+        background: none;
+        color: $color-text-secondary;
+      }
+
+      &:disabled {
+        background-color: $color-bg-disabled;
+        border-color: $color-bg-disabled;
+        cursor: default;
+      }
+    }
+  }
+
+  &__loader {
+    display: block;
+    margin-inline: auto;
+    margin-top: 100px;
+  }
+  &__error {
+    margin-top: 100px;
+  }
+}

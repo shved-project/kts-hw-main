@@ -1,6 +1,7 @@
 import type { ResponseType } from './types/response.type';
 import { api } from './config.api';
 import qs from 'qs';
+import { BASE_URL } from '@/config/api';
 
 export type ProductType = {
   description: string;
@@ -29,7 +30,7 @@ const PAGE_SIZE = 12;
 export type GetProductsParams = {
   page: number;
   search?: string;
-  categoryId?: number;
+  categoryId?: string | null;
 };
 
 export const getProducts = async (
@@ -71,7 +72,19 @@ export const getProduct = async (id: string): Promise<ProductType> => {
     { encodeValuesOnly: true }
   );
 
-  const { data } = await api.get(`/products/${id}?${query}`);
+  const res = await fetch(`${BASE_URL}/products/${id}?${query}`, {
+    cache: 'no-store',
+  });
 
-  return data.data;
+  if (res.status === 404) {
+    throw new Error('Товар не найден');
+  }
+
+  if (!res.ok) {
+    throw new Error('Произошла неизвестная ошибка. Попробуйте позже');
+  }
+
+  const { data } = await res.json();
+
+  return data;
 };

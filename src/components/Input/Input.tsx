@@ -11,7 +11,7 @@ export type InputProps = Omit<
 };
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ onChange, afterSlot, className, value, ...rest }) => {
+  ({ onChange, afterSlot, className, value, ...rest }, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e.target.value);
     };
@@ -19,6 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={classNames(styles.input__wrapper, className)}>
         <input
+          ref={ref}
           type="text"
           className={styles.input}
           value={value}
@@ -31,5 +32,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
+
+Input.displayName = 'Input';
 
 export default Input;

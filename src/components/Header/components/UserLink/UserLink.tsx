@@ -1,4 +1,5 @@
-import { Link } from 'react-router';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type UserIconProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -8,8 +9,8 @@ type UserIconProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 const UserLink: React.FC<UserIconProps> = ({ href, image, alt, ...rest }) => {
   return (
-    <Link to={href} {...rest}>
-      <img src={image} alt={alt} />
+    <Link href={href} {...rest}>
+      <Image src={image} alt={alt} />
     </Link>
   );
 };

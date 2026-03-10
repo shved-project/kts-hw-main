@@ -1,15 +1,15 @@
-$color-brand: #518581;
-$color-brand-hover: #86aaa7;
-$color-brand-active: #487773;
-$color-body-bg: #fafafa;
-$color-bg-block-primary: #ffffff;
-$color-bg-disabled: #d9d9d9;
-$color-text-primary: #000000;
-$color-text-secondary: #afadb5;
-$color-text-accent: $color-brand;
-$color-button-primary-text: #ffffff;
-$color-input-placeholder: #afadb5;
-$color-input-text-disabled: #00000033;
+$color-brand: var(--color-brand);
+$color-brand-hover: var(--color-brand-hover);
+$color-brand-active: var(--color-brand-active);
+$color-body-bg: var(--color-body-bg);
+$color-bg-block-primary: var(--color-bg-block-primary);
+$color-bg-disabled: var(--color-bg-disabled);
+$color-text-primary: var(--color-text-primary);
+$color-text-secondary: var(--color-text-secondary);
+$color-text-accent: var(--color-text-accent);
+$color-button-primary-text: var(--color-button-primary-text);
+$color-input-placeholder: var(--color-input-placeholder);
+$color-input-text-disabled: var(--color-input-text-disabled);
 
 $space-xxs: 8px;
 $space-xs: 12px;

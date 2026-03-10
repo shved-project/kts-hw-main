@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { RootStore } from './RootStore';
 
@@ -5,9 +7,7 @@ const rootStore = new RootStore();
 
 const RootStoreContext = React.createContext<RootStore | null>(null);
 
-export const RootStoreProvider = ({
-  children,
-}: React.PropsWithChildren) => (
+export const RootStoreProvider = ({ children }: React.PropsWithChildren) => (
   <RootStoreContext.Provider value={rootStore}>
     {children}
   </RootStoreContext.Provider>
@@ -22,5 +22,6 @@ export const useRootStore = (): RootStore => {
 };
 
 export const useCartStore = () => useRootStore().cartStore;
+export const useThemeStore = () => useRootStore().themeStore;
 
 export { rootStore };
