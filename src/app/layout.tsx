@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import '@/styles/global.scss';
 import '@/config/configureMobX';
 import { RootStoreProvider } from '@/store';
-import ThemeInitializer from '@/components/ThemeInitializer/ThemeInitializer';
+import ThemeInitializer from '@/components/ThemeInitializer';
 
 export const metadata: Metadata = {
   title: {

@@ -165,6 +165,10 @@
     align-items: center;
     gap: $space-m;
 
+    :global([data-theme='dark']) & img {
+      filter: invert(1);
+    }
+
     &-desktop {
       @include respond(md) {
         display: none;

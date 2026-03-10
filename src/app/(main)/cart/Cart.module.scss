@@ -25,6 +25,7 @@
     gap: $space-m;
     padding: $space-m;
     background-color: $color-bg-block-primary;
+    color: $color-text-primary;
     border-radius: 8px;
 
     @include respond(md) {
@@ -56,6 +57,7 @@
       border: none;
       padding: 0;
       text-align: left;
+      color: inherit;
 
       &:hover {
         color: $color-brand-hover;
@@ -75,6 +77,7 @@
       background: $color-bg-block-primary;
       border-radius: 4px;
       cursor: pointer;
+      color: inherit;
       font-size: 18px;
       display: flex;
       align-items: center;
