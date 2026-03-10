@@ -27,7 +27,9 @@ const ProductDetail: React.FC<ProductDetailProps> = async ({ productId }) => {
   }
 
   if (errorMessage) {
-    return <ErrorApiMessage error={errorMessage} />;
+    return (
+      <ErrorApiMessage className={styles.product__error} error={errorMessage} />
+    );
   }
 
   return (

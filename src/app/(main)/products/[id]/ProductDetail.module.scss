@@ -135,5 +135,9 @@
   &__loader {
     display: block;
     margin-inline: auto;
+    margin-top: 100px;
+  }
+  &__error {
+    margin-top: 100px;
   }
 }
