@@ -1,12 +1,13 @@
 'use client';
 
 import UserLink from '../UserLink';
+import ToggleTheme from '../ToggleTheme';
 import styles from '../../Header.module.scss';
 import routerData from '@/config/routerData';
 import bagIcon from '@/assets/icons/bag.svg';
 import userIcon from '@/assets/icons/user.svg';
 import classNames from 'classnames';
-import { useCartStore, useThemeStore } from '@/store/root';
+import { useCartStore } from '@/store/root';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -17,13 +18,10 @@ type UserLinksProps = {
 
 const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
   const { totalCount } = useCartStore();
-  const { theme, toggle } = useThemeStore();
 
   return (
     <div className={classNames(styles.header__user, className)}>
-      <button onClick={toggle} aria-label="Toggle theme">
-        {theme === 'light' ? 'Dark' : 'Light'}
-      </button>
+      <ToggleTheme />
       <Link
         href={routerData.cart.href}
         className={styles['header__cart-link']}

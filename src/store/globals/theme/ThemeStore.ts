@@ -28,11 +28,17 @@ export class ThemeStore {
       : 'light';
     this._theme = saved ?? preferred;
     document.documentElement.dataset.theme = this._theme;
+    this._saveCookie(this._theme);
   };
 
   toggle = (): void => {
     this._theme = this._theme === 'light' ? 'dark' : 'light';
     document.documentElement.dataset.theme = this._theme;
     localStorage.setItem('theme', this._theme);
+    this._saveCookie(this._theme);
+  };
+
+  private _saveCookie = (theme: Theme): void => {
+    document.cookie = `theme=${theme};path=/;max-age=31536000;SameSite=Lax`;
   };
 }

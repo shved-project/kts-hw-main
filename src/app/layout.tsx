@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { cookies } from 'next/headers';
 import '@/styles/global.scss';
 import '@/config/configureMobX';
 import { RootStoreProvider } from '@/store';
-import ThemeInitializer from '@/components/ThemeInitializer';
+import type { Theme } from '@/store/globals/theme';
+import { themeScript } from '@/lib/themeScript';
 
 export const metadata: Metadata = {
   title: {
@@ -68,17 +70,22 @@ const robotoFont = localFont({
   ],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const theme = (cookieStore.get('theme')?.value ?? 'light') as Theme;
+
   return (
-    <html lang="en">
+    <html lang="en" data-theme={theme} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={robotoFont.className}>
         <div id="root">
           <RootStoreProvider>
-            <ThemeInitializer />
             {children}
           </RootStoreProvider>
         </div>
