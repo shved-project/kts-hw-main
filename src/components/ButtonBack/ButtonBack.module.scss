@@ -3,8 +3,12 @@
 .button-back {
   background: none;
   border: none;
-
   display: flex;
   align-items: center;
   gap: $space-xs;
+  color: $color-text-primary;
+
+  :global([data-theme='dark']) & img {
+    filter: invert(1);
+  }
 }

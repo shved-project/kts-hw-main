@@ -19,7 +19,11 @@ const ButtonBack = () => {
       type="button"
       onClick={handleClick}
     >
-      <Image src={arrowLeftIcon} alt="back" />
+      <Image
+        className={styles['button-back__icon']}
+        src={arrowLeftIcon}
+        alt="back"
+      />
       <Text view="p-20">Back</Text>
     </button>
   );
