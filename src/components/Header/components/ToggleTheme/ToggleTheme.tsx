@@ -34,8 +34,8 @@ const ToggleTheme = () => {
             className={styles.header__toggle_theme_icon}
             src={isLightTheme ? darkThemeIcon : lightThemeIcon}
             alt="toggle-theme"
-            width={20}
-            height={20}
+            width={23}
+            height={23}
           />
         </div>
       </div>
