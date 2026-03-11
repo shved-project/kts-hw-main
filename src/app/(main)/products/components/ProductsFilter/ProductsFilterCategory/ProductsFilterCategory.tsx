@@ -6,6 +6,7 @@ import arrowDownIcon from '@/assets/icons/arrow-down.svg';
 import { useProductsStore } from '@/store';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
+import ProductsFilterCategoryItem from '../ProductsFilterCategoryItem';
 
 const ProductsFilterCategory = () => {
   const {
@@ -84,38 +85,19 @@ const ProductsFilterCategory = () => {
         id="categories-dropdown"
         role="listbox"
       >
-        <div
-          className={classNames(styles['products__category-dropdown-option'], {
-            [styles['products__category-dropdown-option--selected']]:
-              currentCategoryId === null,
-          })}
+        <ProductsFilterCategoryItem
+          title="All categories"
+          isCurrentCategory={currentCategoryId === null}
           onClick={handleClickAllProducts}
-          role="option"
-          aria-selected={currentCategoryId === null}
-        >
-          All categories
-        </div>
-        {categories.map((cat) => {
-          const isCurrentCategory = cat.id === Number(currentCategoryId);
-
-          return (
-            <div
-              key={cat.id}
-              className={classNames(
-                styles['products__category-dropdown-option'],
-                {
-                  [styles['products__category-dropdown-option--selected']]:
-                    isCurrentCategory,
-                }
-              )}
-              onClick={() => handleClickOption(cat.id.toString())}
-              role="option"
-              aria-selected={isCurrentCategory}
-            >
-              {cat.title}
-            </div>
-          );
-        })}
+        />
+        {categories.map((cat) => (
+          <ProductsFilterCategoryItem
+            key={cat.id}
+            title={cat.title}
+            isCurrentCategory={cat.id === Number(currentCategoryId)}
+            onClick={() => handleClickOption(cat.id.toString())}
+          />
+        ))}
       </div>
     </div>
   );
