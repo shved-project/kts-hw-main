@@ -71,7 +71,7 @@ const ProductsList = () => {
                     : undefined
                 }
               >
-                Add to cart
+                {isInCart(product.documentId) ? 'In Cart' : 'Add to Cart'}
               </Button>
             }
             contentSlot={
