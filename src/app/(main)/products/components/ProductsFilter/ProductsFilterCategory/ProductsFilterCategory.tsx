@@ -58,9 +58,9 @@ const ProductsFilterCategory = () => {
     [setCurrentCategoryId]
   );
 
-  const handleClickAllProducts = () => {
+  const handleClickAllProducts = React.useCallback(() => {
     setCurrentCategoryId(null);
-  };
+  }, [setCurrentCategoryId]);
 
   return (
     <div

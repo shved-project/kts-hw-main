@@ -19,9 +19,9 @@ const BurgerButton: React.FC<BurgerButtonProps> = ({
     }
   }, [isBurgerActive]);
 
-  const handleBurgerClick = () => {
+  const handleBurgerClick = React.useCallback(() => {
     setIsBurgerActive((prev) => !prev);
-  };
+  }, [setIsBurgerActive]);
 
   return (
     <button

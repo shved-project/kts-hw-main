@@ -1,3 +1,4 @@
+import React from 'react';
 import { CartItemType, useCartStore } from '@/store';
 import styles from '../Cart.module.scss';
 import Image from 'next/image';
@@ -11,6 +12,18 @@ type CartItemProps = {
 
 const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { increaseQuantity, decreaseQuantity, removeItem } = useCartStore();
+
+  const handleDecrease = React.useCallback(() => {
+    decreaseQuantity(item.product.documentId);
+  }, [decreaseQuantity, item.product.documentId]);
+
+  const handleIncrease = React.useCallback(() => {
+    increaseQuantity(item.product.documentId);
+  }, [increaseQuantity, item.product.documentId]);
+
+  const handleRemove = React.useCallback(() => {
+    removeItem(item.product.documentId);
+  }, [removeItem, item.product.documentId]);
 
   return (
     <li key={item.product.documentId} className={styles.cart__item}>
@@ -39,7 +52,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
         <button
           type="button"
           className={styles.cart__item_btn}
-          onClick={() => decreaseQuantity(item.product.documentId)}
+          onClick={handleDecrease}
         >
           −
         </button>
@@ -47,14 +60,14 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
         <button
           type="button"
           className={styles.cart__item_btn}
-          onClick={() => increaseQuantity(item.product.documentId)}
+          onClick={handleIncrease}
         >
           +
         </button>
         <button
           type="button"
           className={styles.cart__item_remove}
-          onClick={() => removeItem(item.product.documentId)}
+          onClick={handleRemove}
         >
           Remove
         </button>
