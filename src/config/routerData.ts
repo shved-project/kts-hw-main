@@ -5,8 +5,8 @@ type Route<Params extends unknown[] = []> = {
 
 const routerData = {
   products: {
-    href: '/products',
-    create: () => '/products',
+    href: '/',
+    create: () => '/',
   },
   product: {
     href: '/products/:id',
