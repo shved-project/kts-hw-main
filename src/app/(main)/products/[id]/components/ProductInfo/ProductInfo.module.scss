@@ -1,0 +1,30 @@
+@use '@/styles/mixins' as *;
+
+.info {
+  flex-basis: 100%;
+}
+
+.infoText {
+  margin-bottom: 56px;
+}
+
+.infoTitle {
+  margin-bottom: $space-m;
+}
+
+.infoPrice {
+  margin-bottom: $space-xl;
+}
+
+.infoButtons {
+  display: flex;
+  gap: $space-xl;
+
+  @include respond(md) {
+    gap: $space-m;
+  }
+
+  @include respond(sm) {
+    justify-content: space-between;
+  }
+}

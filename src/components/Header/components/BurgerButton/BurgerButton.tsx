@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import styles from '../../Header.module.scss';
+import styles from './BurgerButton.module.scss';
 
 type BurgerButtonProps = {
   isBurgerActive: boolean;
@@ -25,16 +25,16 @@ const BurgerButton: React.FC<BurgerButtonProps> = ({
 
   return (
     <button
-      className={classNames(styles.header__burger, {
-        [styles['header__burger--active']]: isBurgerActive,
+      className={classNames(styles.burger, {
+        [styles['burger--active']]: isBurgerActive,
       })}
       type="button"
       aria-label="burger-menu"
       onClick={handleBurgerClick}
     >
-      <div className={styles['header__burger-item']}></div>
-      <div className={styles['header__burger-item']}></div>
-      <div className={styles['header__burger-item']}></div>
+      <div className={styles.burgerItem}></div>
+      <div className={styles.burgerItem}></div>
+      <div className={styles.burgerItem}></div>
     </button>
   );
 };

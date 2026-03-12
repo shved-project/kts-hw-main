@@ -4,7 +4,7 @@ import Container from '@/components/Container';
 import Text from '@/components/Text';
 import routerData from '@/config/routerData';
 import { useRouter } from 'next/navigation';
-import styles from '../Cart.module.scss';
+import styles from './EmptyCart.module.scss';
 
 const EmptyCart = () => {
   const router = useRouter();
@@ -16,13 +16,13 @@ const EmptyCart = () => {
   return (
     <section className={styles.cart}>
       <Container>
-        <Text view="title" tag="h1" className={styles.cart__title}>
+        <Text view="title" tag="h1" className={styles.title}>
           Cart
         </Text>
         <Text view="p-20" color="secondary">
           Your cart is empty
         </Text>
-        <Button className={styles.cart__back} onClick={handleGoToProducts}>
+        <Button className={styles.back} onClick={handleGoToProducts}>
           Go to Products
         </Button>
       </Container>

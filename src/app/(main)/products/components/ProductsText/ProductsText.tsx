@@ -1,9 +1,9 @@
 import Text from '@/components/Text';
-import styles from '../../Products.module.scss';
+import styles from './ProductsText.module.scss';
 
 const ProductsText = () => {
   return (
-    <div className={styles.products__text}>
+    <div className={styles.text}>
       <Text tag="h1" view="title">
         Products
       </Text>

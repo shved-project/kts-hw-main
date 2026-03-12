@@ -1,6 +1,6 @@
 import React from 'react';
 import { useProductsStore } from '@/store/locals/products';
-import styles from '../../../Products.module.scss';
+import styles from './ProductsList.module.scss';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Text from '@/components/Text';
@@ -44,7 +44,7 @@ const ProductsList = () => {
   return (
     <>
       {total !== 0 && (
-        <div className={styles['products__list-title']}>
+        <div className={styles.listTitle}>
           <Text tag="h2" view="title-h2">
             Total products
           </Text>
@@ -53,10 +53,10 @@ const ProductsList = () => {
           </Text>
         </div>
       )}
-      <div className={styles.products__list}>
+      <div className={styles.list}>
         {productsList.map((product) => (
           <Card
-            className={styles.products__card}
+            className={styles.card}
             image={product.images[0].url}
             title={product.title}
             subtitle={product.description}
@@ -67,7 +67,7 @@ const ProductsList = () => {
                 disabled={isInCart(product.documentId)}
                 className={
                   isInCart(product.documentId)
-                    ? styles.products__button_in_cart
+                    ? styles.buttonInCart
                     : undefined
                 }
               >
@@ -85,8 +85,8 @@ const ProductsList = () => {
         ))}
       </div>
       {!isAllLoadProducts && (
-        <div className={styles['products__loader-wrapper']} ref={loaderRef}>
-          <Loader className={styles.products__loader} />
+        <div className={styles.loaderWrapper} ref={loaderRef}>
+          <Loader className={styles.loader} />
         </div>
       )}
     </>

@@ -3,7 +3,7 @@
 import React from 'react';
 import { useThemeStore } from '@/store';
 import { observer } from 'mobx-react-lite';
-import styles from '../../Header.module.scss';
+import styles from './ToggleTheme.module.scss';
 import Image from 'next/image';
 import lightThemeIcon from '@/assets/icons/light-theme.svg';
 import darkThemeIcon from '@/assets/icons/dark-theme.svg';
@@ -20,18 +20,18 @@ const ToggleTheme = () => {
 
   return (
     <button
-      className={styles.header__toggle_theme_button}
+      className={styles.button}
       onClick={toggle}
       aria-label="Toggle theme"
     >
-      <div className={styles.header__toggle_theme_wrapper}>
+      <div className={styles.wrapper}>
         <div
-          className={classNames(styles.header__toggle_theme_thumb, {
-            [styles['header__toggle_theme_thumb--active']]: isLightTheme,
+          className={classNames(styles.thumb, {
+            [styles['thumb--active']]: isLightTheme,
           })}
         >
           <Image
-            className={styles.header__toggle_theme_icon}
+            className={styles.icon}
             src={isLightTheme ? darkThemeIcon : lightThemeIcon}
             alt="toggle-theme"
             width={23}

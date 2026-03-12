@@ -1,0 +1,38 @@
+@use '@/styles/mixins' as *;
+
+.button {
+  background: none;
+  border: none;
+}
+
+.wrapper {
+  position: relative;
+  width: 60px;
+  height: 36px;
+  border: 2px solid $color-text-primary;
+  border-radius: 20px;
+  background-color: $color-bg-block-primary;
+}
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  transform: translate(0, -50%);
+  height: 29px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  transition: all $transition-duration $transition-timing-function;
+
+  &--active {
+    left: calc(100% - 2px);
+    transform: translate(-100%, -50%);
+  }
+}
+
+.icon {
+  display: block;
+}

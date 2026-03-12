@@ -1,0 +1,10 @@
+@use '@/styles/mixins' as *;
+
+.inputWrapper {
+  display: flex;
+  gap: $space-m;
+}
+
+.input {
+  flex-grow: 1;
+}

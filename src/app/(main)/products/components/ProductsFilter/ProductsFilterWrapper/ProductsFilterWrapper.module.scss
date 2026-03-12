@@ -1,0 +1,8 @@
+@use '@/styles/mixins' as *;
+
+.form {
+  margin-bottom: $space-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+}

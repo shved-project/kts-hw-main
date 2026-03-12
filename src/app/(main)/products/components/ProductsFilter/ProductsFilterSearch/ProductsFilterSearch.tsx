@@ -1,7 +1,7 @@
 import React from 'react';
 import Input from '@/components/Input';
 import { useProductsStore } from '@/store';
-import styles from '../../../Products.module.scss';
+import styles from './ProductsFilterSearch.module.scss';
 import Button from '@/components/Button';
 import { observer } from 'mobx-react-lite';
 import { usePathname, useRouter } from 'next/navigation';
@@ -68,9 +68,9 @@ const ProductsFilterSearch = () => {
   }, [handleClickButton, setSearchParam]);
 
   return (
-    <div className={styles['products__input-wrappper']}>
+    <div className={styles.inputWrapper}>
       <Input
-        className={styles.products__input}
+        className={styles.input}
         placeholder="Search products..."
         ref={inputRef}
       />

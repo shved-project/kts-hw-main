@@ -3,7 +3,7 @@
 import React from 'react';
 import { ProductType } from '@/api/products.api';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import styles from '../../ProductDetail.module.scss';
+import styles from './SwiperImages.module.scss';
 import Image from 'next/image';
 import classNames from 'classnames';
 import buttonArrowLeft from '@/assets/icons/button-arrow-left.svg';
@@ -27,15 +27,15 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
   };
 
   return (
-    <div className={styles.product__swiper}>
+    <div className={styles.wrapper}>
       <button
         type="button"
         onClick={() => swiperRef.current?.swiper.slidePrev()}
         className={classNames(
-          styles['product__swiper-button'],
-          styles['product__swiper-button-prev'],
+          styles.button,
+          styles.buttonPrev,
           {
-            [styles['product__swiper-button-disabled']]: isBeginningSlide,
+            [styles.buttonDisabled]: isBeginningSlide,
           }
         )}
         aria-label="prev slide"
@@ -43,14 +43,14 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
         <Image src={buttonArrowLeft} alt="prev slide" />
       </button>
       <Swiper
-        className={styles.swiper}
+        className={styles.swiperEl}
         ref={swiperRef}
         onSlideChange={handleSlideChange}
       >
         {images.map((image) => (
           <SwiperSlide key={image.url}>
             <Image
-              className={styles['product__swiper-image']}
+              className={styles.image}
               src={image.url}
               alt="product image"
               fill
@@ -62,10 +62,10 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
         type="button"
         onClick={() => swiperRef.current?.swiper.slideNext()}
         className={classNames(
-          styles['product__swiper-button'],
-          styles['product__swiper-button-next'],
+          styles.button,
+          styles.buttonNext,
           {
-            [styles['product__swiper-button-disabled']]: isEndSlide,
+            [styles.buttonDisabled]: isEndSlide,
           }
         )}
         aria-label="next slide"

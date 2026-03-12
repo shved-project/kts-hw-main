@@ -1,0 +1,56 @@
+@use '@/styles/mixins' as *;
+
+.navItem {
+  display: flex;
+  align-items: stretch;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  height: inherit;
+  position: relative;
+  transition: color $transition-duration $transition-timing-function;
+
+  &:hover {
+    color: $color-brand-hover;
+
+    &::after {
+      background-color: $color-brand-hover;
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    transition: background-color $transition-duration $transition-timing-function;
+  }
+
+  &--active {
+    color: $color-brand;
+
+    &:hover {
+      color: $color-brand;
+
+      &::after {
+        background-color: $color-brand;
+      }
+    }
+
+    &::after {
+      background-color: $color-brand;
+      font-weight: 600;
+    }
+
+    .navLinkText {
+      font-weight: 600;
+    }
+  }
+}
+
+.navLinkText {
+}

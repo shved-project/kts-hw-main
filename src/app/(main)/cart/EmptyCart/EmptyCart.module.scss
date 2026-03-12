@@ -1,0 +1,13 @@
+@use '@/styles/mixins' as *;
+
+.cart {
+  margin-block: 100px;
+}
+
+.title {
+  margin-bottom: $space-l;
+}
+
+.back {
+  margin-top: $space-m;
+}

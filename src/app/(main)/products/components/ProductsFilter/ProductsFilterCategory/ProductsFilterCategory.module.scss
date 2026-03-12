@@ -1,0 +1,22 @@
+@use '@/styles/mixins' as *;
+
+.dropdownWrapper {
+  position: relative;
+  max-width: 300px;
+}
+
+.dropdown {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  top: calc(100% + $space-xs);
+  left: 0;
+  right: 0;
+  background-color: $color-bg-block-primary;
+  transition: opacity $transition-duration $transition-timing-function;
+
+  &--open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

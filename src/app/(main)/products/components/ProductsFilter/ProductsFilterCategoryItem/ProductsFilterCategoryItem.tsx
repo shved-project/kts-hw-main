@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import styles from '../../../Products.module.scss';
+import styles from './ProductsFilterCategoryItem.module.scss';
 
 type ProductsFilterCategoryItemProps = {
   isCurrentCategory: boolean;
@@ -14,9 +14,8 @@ const ProductsFilterCategoryItem: React.FC<ProductsFilterCategoryItemProps> = ({
 }) => {
   return (
     <div
-      className={classNames(styles['products__category-dropdown-option'], {
-        [styles['products__category-dropdown-option--selected']]:
-          isCurrentCategory,
+      className={classNames(styles.option, {
+        [styles['option--selected']]: isCurrentCategory,
       })}
       onClick={onClick}
       role="option"

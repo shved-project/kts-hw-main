@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from '@/components/Input';
-import styles from '../../../Products.module.scss';
+import styles from './ProductsFilterCategory.module.scss';
 import Image from 'next/image';
 import arrowDownIcon from '@/assets/icons/arrow-down.svg';
 import { useProductsStore } from '@/store';
@@ -65,7 +65,7 @@ const ProductsFilterCategory = () => {
 
   return (
     <div
-      className={styles['products__category-dropdown-wrapper']}
+      className={styles.dropdownWrapper}
       ref={multiDropdownRef}
     >
       <Input
@@ -78,9 +78,8 @@ const ProductsFilterCategory = () => {
         aria-haspopup="listbox"
       />
       <div
-        className={classNames(styles['products__category-dropdown'], {
-          [styles['products__category-dropdown--open']]:
-            isOpenCategoriesDropdown,
+        className={classNames(styles.dropdown, {
+          [styles['dropdown--open']]: isOpenCategoriesDropdown,
         })}
         id="categories-dropdown"
         role="listbox"

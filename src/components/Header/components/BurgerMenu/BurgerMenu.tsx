@@ -3,7 +3,7 @@
 import React from 'react';
 import headerNav from '@/config/headerNav';
 import classNames from 'classnames';
-import styles from '../../Header.module.scss';
+import styles from './BurgerMenu.module.scss';
 import HeaderNavLink from '../HeaderNavLink';
 import UserLinks from '../UserLinks';
 import BurgerButton from '../BurgerButton';
@@ -37,14 +37,14 @@ const BurgerMenu = () => {
   return (
     <>
       <div
-        className={classNames(styles['header__nav-wrapper'], {
-          [styles['header__nav-wrapper--active']]: isBurgerActive,
+        className={classNames(styles.navWrapper, {
+          [styles['navWrapper--active']]: isBurgerActive,
         })}
         ref={headerNavWrapperRef}
       >
-        <div className={styles['header__nav-bg-mobile']}>
-          <nav className={styles.header__nav}>
-            <ul className={styles['header__nav-list']}>
+        <div className={styles.navBgMobile}>
+          <nav className={styles.nav}>
+            <ul className={styles.navList}>
               {headerNav.map((link) => (
                 <HeaderNavLink
                   link={link}
@@ -54,10 +54,10 @@ const BurgerMenu = () => {
               ))}
             </ul>
           </nav>
-          <UserLinks className={styles['header__user-mobile']} />
+          <UserLinks className={styles.userMobile} />
         </div>
       </div>
-      <UserLinks className={styles['header__user-desktop']} />
+      <UserLinks className={styles.userDesktop} />
       <BurgerButton
         isBurgerActive={isBurgerActive}
         setIsBurgerActive={setIsBurgerActive}

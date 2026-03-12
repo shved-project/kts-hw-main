@@ -1,0 +1,85 @@
+@use '@/styles/mixins' as *;
+
+.navWrapper {
+  height: inherit;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: background-color $transition-duration $transition-timing-function;
+
+  @include respond(md) {
+    display: flex;
+    justify-content: end;
+    transform: translate(0, 0);
+    top: $header-height;
+    left: 0;
+    right: 0;
+    height: calc(100vh - $header-height);
+    pointer-events: none;
+  }
+
+  &--active {
+    @include respond(md) {
+      pointer-events: all;
+      background-color: #00000033;
+
+      .navBgMobile {
+        transform: translateX(0);
+      }
+    }
+  }
+}
+
+.navBgMobile {
+  height: inherit;
+  transition: transform $transition-duration $transition-timing-function;
+
+  @include respond(md) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: $space-xl;
+    overflow-y: auto;
+    min-height: calc(100vh - $header-height);
+    background-color: $color-bg-block-primary;
+    padding: $space-xl 80px;
+    transform: translateX(100%);
+  }
+}
+
+.nav {
+  height: inherit;
+
+  @include respond(md) {
+    height: auto;
+  }
+}
+
+.navList {
+  display: flex;
+  height: inherit;
+  gap: $space-xl;
+  list-style: none;
+
+  @include respond(md) {
+    flex-direction: column;
+  }
+}
+
+.userDesktop {
+  display: flex;
+
+  @include respond(md) {
+    display: none;
+  }
+}
+
+.userMobile {
+  display: none;
+
+  @include respond(md) {
+    display: flex;
+  }
+}

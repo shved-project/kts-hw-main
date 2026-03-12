@@ -1,0 +1,19 @@
+@use '@/styles/mixins' as *;
+
+.buttonCart {
+  background: none;
+  color: $color-text-primary;
+  border: 1px solid $color-text-secondary;
+  transition: $transition-duration $transition-timing-function;
+
+  &:not(:disabled):hover {
+    background: none;
+    color: $color-text-secondary;
+  }
+
+  &:disabled {
+    background-color: $color-bg-disabled;
+    border-color: $color-bg-disabled;
+    cursor: default;
+  }
+}

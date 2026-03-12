@@ -1,0 +1,14 @@
+@use '@/styles/mixins' as *;
+
+.option {
+  padding: 14px 12px;
+  cursor: pointer;
+
+  &:not(.option--selected):hover {
+    color: $color-text-secondary;
+  }
+
+  &--selected {
+    color: $color-text-accent;
+  }
+}

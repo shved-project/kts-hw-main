@@ -3,7 +3,7 @@ import { useProductsStore } from '@/store/locals/products';
 import { observer } from 'mobx-react-lite';
 import ProductsList from '../ProductsList';
 import Loader from '@/components/Loader';
-import styles from '../../../Products.module.scss';
+import styles from './ProductsListWrapper.module.scss';
 import Text from '@/components/Text';
 import ErrorApiMessage from '@/components/ErrorApiMessage';
 import { useSearchParams } from 'next/navigation';
@@ -34,15 +34,15 @@ const ProductsListWrapper = () => {
 
   if (isInitLoading) {
     return (
-      <div className={styles['products__loader-wrapper']}>
-        <Loader className={styles.products__loader} />
+      <div className={styles.loaderWrapper}>
+        <Loader className={styles.loader} />
       </div>
     );
   }
 
   if (isEmptySearchResult) {
     return (
-      <div className={styles['products__empty']}>
+      <div className={styles.empty}>
         <Text view="p-20" color="secondary">
           No products found. Try changing search or filter.
         </Text>

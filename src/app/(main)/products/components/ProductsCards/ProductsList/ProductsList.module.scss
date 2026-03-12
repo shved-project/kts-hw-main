@@ -1,0 +1,41 @@
+@use '@/styles/mixins' as *;
+
+.listTitle {
+  display: flex;
+  align-items: center;
+  gap: $space-m;
+  margin-bottom: 35px;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+
+  @include respond(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @include respond(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  margin-inline: auto;
+  width: 100%;
+}
+
+.buttonInCart {
+  background-color: $color-bg-disabled;
+  cursor: default;
+}
+
+.loaderWrapper {
+  margin-top: 50px;
+}
+
+.loader {
+  display: block;
+  margin-inline: auto;
+}

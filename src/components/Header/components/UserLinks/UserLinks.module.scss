@@ -1,0 +1,33 @@
+@use '@/styles/mixins' as *;
+
+.user {
+  align-items: center;
+  gap: $space-m;
+
+  :global([data-theme='dark']) & img {
+    filter: invert(1);
+  }
+}
+
+.cartLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $color-brand;
+  color: $color-button-primary-text;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 50%;
+}

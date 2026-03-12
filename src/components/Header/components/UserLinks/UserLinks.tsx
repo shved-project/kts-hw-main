@@ -2,7 +2,7 @@
 
 import UserLink from '../UserLink';
 import ToggleTheme from '../ToggleTheme';
-import styles from '../../Header.module.scss';
+import styles from './UserLinks.module.scss';
 import routerData from '@/config/routerData';
 import bagIcon from '@/assets/icons/bag.svg';
 import userIcon from '@/assets/icons/user.svg';
@@ -20,16 +20,16 @@ const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
   const { totalCount } = useCartStore();
 
   return (
-    <div className={classNames(styles.header__user, className)}>
+    <div className={classNames(styles.user, className)}>
       <ToggleTheme />
       <Link
         href={routerData.cart.href}
-        className={styles['header__cart-link']}
+        className={styles.cartLink}
         aria-label="Cart"
       >
         <Image src={bagIcon} alt="Cart" />
         {totalCount > 0 && (
-          <span className={styles['header__cart-badge']}>{totalCount}</span>
+          <span className={styles.cartBadge}>{totalCount}</span>
         )}
       </Link>
       <UserLink

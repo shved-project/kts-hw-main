@@ -1,6 +1,6 @@
 import React from 'react';
 import { CartItemType, useCartStore } from '@/store';
-import styles from '../Cart.module.scss';
+import styles from './CartItem.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import routerData from '@/config/routerData';
@@ -26,8 +26,8 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   }, [removeItem, item.product.documentId]);
 
   return (
-    <li key={item.product.documentId} className={styles.cart__item}>
-      <div className={styles.cart__item_image}>
+    <li key={item.product.documentId} className={styles.item}>
+      <div className={styles.itemImage}>
         <Image
           src={item.product.images[0]?.url}
           alt={item.product.title}
@@ -35,10 +35,10 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           height={80}
         />
       </div>
-      <div className={styles.cart__item_info}>
+      <div className={styles.itemInfo}>
         <Link
           href={routerData.product.create(item.product.documentId)}
-          className={styles.cart__item_title}
+          className={styles.itemTitle}
         >
           <Text tag="h3" view="p-20" weight="medium">
             {item.product.title}
@@ -48,25 +48,25 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
           ${item.product.price} × {item.quantity}
         </Text>
       </div>
-      <div className={styles.cart__item_actions}>
+      <div className={styles.itemActions}>
         <button
           type="button"
-          className={styles.cart__item_btn}
+          className={styles.itemBtn}
           onClick={handleDecrease}
         >
           −
         </button>
-        <span className={styles.cart__item_qty}>{item.quantity}</span>
+        <span className={styles.itemQty}>{item.quantity}</span>
         <button
           type="button"
-          className={styles.cart__item_btn}
+          className={styles.itemBtn}
           onClick={handleIncrease}
         >
           +
         </button>
         <button
           type="button"
-          className={styles.cart__item_remove}
+          className={styles.itemRemove}
           onClick={handleRemove}
         >
           Remove

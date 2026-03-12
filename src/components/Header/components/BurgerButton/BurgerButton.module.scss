@@ -1,0 +1,58 @@
+@use '@/styles/mixins' as *;
+
+.burger {
+  display: none;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: none;
+  border: none;
+
+  @include respond(md) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &--active {
+    .burgerItem {
+      transition-delay: $transition-duration, 0s, $transition-duration;
+
+      &:first-child {
+        translate: 0 0;
+        rotate: 45deg;
+      }
+
+      &:nth-child(2) {
+        opacity: 0;
+      }
+
+      &:last-child {
+        translate: 0 0;
+        rotate: -45deg;
+      }
+    }
+  }
+}
+
+.burgerItem {
+  position: absolute;
+  width: 50%;
+  height: 3px;
+  background-color: $color-text-primary;
+  transition-property: opacity, translate, rotate;
+  transition-duration: 0s, $transition-duration, $transition-duration;
+  transition-delay: $transition-duration, $transition-duration, 0s;
+
+  &:first-child {
+    translate: 0 -12px;
+  }
+
+  &:nth-child(2) {
+    opacity: 1;
+  }
+
+  &:last-child {
+    translate: 0 12px;
+  }
+}

@@ -4,7 +4,7 @@ import React from 'react';
 import { useCartStore } from '@/store';
 import { ProductType } from '@/api/products.api';
 import Button from '@/components/Button';
-import styles from '../../ProductDetail.module.scss';
+import styles from './AddToCartButton.module.scss';
 import { observer } from 'mobx-react-lite';
 
 type AddToCartButtonProps = {
@@ -21,7 +21,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({ product }) => {
 
   return (
     <Button
-      className={styles['product__info-button-cart']}
+      className={styles.buttonCart}
       onClick={handleAddToCart}
       disabled={inCart}
     >

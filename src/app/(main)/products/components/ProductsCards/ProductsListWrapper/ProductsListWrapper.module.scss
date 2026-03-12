@@ -1,0 +1,15 @@
+@use '@/styles/mixins' as *;
+
+.loaderWrapper {
+  margin-top: 50px;
+}
+
+.loader {
+  display: block;
+  margin-inline: auto;
+}
+
+.empty {
+  text-align: center;
+  padding: 60px 20px;
+}
