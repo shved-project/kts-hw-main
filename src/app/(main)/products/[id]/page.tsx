@@ -3,7 +3,7 @@ import ProductDetail from './ProductDetail';
 import Loader from '@/components/Loader';
 import styles from './ProductDetail.module.scss';
 import { Metadata } from 'next';
-import { getProduct } from '@/api/products.api';
+import { getProduct } from '@/api/req/products.api';
 
 type PageProps = {
   params: Promise<{ id: string }>;

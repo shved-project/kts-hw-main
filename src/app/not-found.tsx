@@ -10,11 +10,7 @@ const NotFound = () => {
   const router = useRouter();
 
   const handleClick = React.useCallback(() => {
-    if (window.history.length > 1) {
-      router.back();
-    } else {
-      router.push('/');
-    }
+    router.push('/');
   }, [router]);
 
   return (
@@ -22,7 +18,7 @@ const NotFound = () => {
       <Text tag="h1" view="title">
         404 NOT FOUND
       </Text>
-      <Button onClick={handleClick}>Go back</Button>
+      <Button onClick={handleClick}>Go home</Button>
     </div>
   );
 };

@@ -1,0 +1,19 @@
+@use '@/styles/mixins' as *;
+
+.registerFormInputs {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  margin-bottom: $space-l;
+}
+
+.RegisterFormButton {
+  display: flex;
+  align-items: center;
+  gap: $space-xxs;
+  margin-inline: auto;
+}
+
+.RegisterFormLoader {
+  fill: #ffffff;
+}

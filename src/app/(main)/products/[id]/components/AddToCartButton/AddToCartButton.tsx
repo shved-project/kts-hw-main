@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useCartStore } from '@/store';
-import { ProductType } from '@/api/products.api';
+import { ProductType } from '@/api/req/products.api';
 import Button from '@/components/Button';
 import styles from './AddToCartButton.module.scss';
 import { observer } from 'mobx-react-lite';

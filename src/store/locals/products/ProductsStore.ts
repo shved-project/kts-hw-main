@@ -3,7 +3,7 @@ import {
   getProducts,
   ProductCategoryType,
   type ProductType,
-} from '@/api/products.api';
+} from '@/api/req/products.api';
 import {
   makeObservable,
   observable,

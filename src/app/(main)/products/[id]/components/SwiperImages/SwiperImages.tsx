@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ProductType } from '@/api/products.api';
+import { ProductType } from '@/api/req/products.api';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 import styles from './SwiperImages.module.scss';
 import Image from 'next/image';
@@ -31,13 +31,9 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
       <button
         type="button"
         onClick={() => swiperRef.current?.swiper.slidePrev()}
-        className={classNames(
-          styles.button,
-          styles.buttonPrev,
-          {
-            [styles.buttonDisabled]: isBeginningSlide,
-          }
-        )}
+        className={classNames(styles.button, styles.buttonPrev, {
+          [styles.buttonDisabled]: isBeginningSlide,
+        })}
         aria-label="prev slide"
       >
         <Image src={buttonArrowLeft} alt="prev slide" />
@@ -61,13 +57,9 @@ const SwiperImages = ({ images }: SwiperImagesProps) => {
       <button
         type="button"
         onClick={() => swiperRef.current?.swiper.slideNext()}
-        className={classNames(
-          styles.button,
-          styles.buttonNext,
-          {
-            [styles.buttonDisabled]: isEndSlide,
-          }
-        )}
+        className={classNames(styles.button, styles.buttonNext, {
+          [styles.buttonDisabled]: isEndSlide,
+        })}
         aria-label="next slide"
       >
         <Image src={buttonArrowRight} alt="next slide" />

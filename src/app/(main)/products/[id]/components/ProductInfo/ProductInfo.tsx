@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { ProductType } from '@/api/products.api';
+import type { ProductType } from '@/api/req/products.api';
 import Text from '@/components/Text';
 import styles from './ProductInfo.module.scss';
 import Button from '@/components/Button';

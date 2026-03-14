@@ -1,0 +1,19 @@
+@use '@/styles/mixins' as *;
+
+.registerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding-block: $space-xl;
+}
+
+.registerFormWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 500px;
+  flex-grow: 1;
+  gap: $space-l;
+  text-align: center;
+}

@@ -1,4 +1,4 @@
-import type { ProductType } from '@/api/products.api';
+import type { ProductType } from '@/api/req/products.api';
 import { makeObservable, observable, computed, action } from 'mobx';
 import type { IGlobalStore } from '@/store/interfaces';
 

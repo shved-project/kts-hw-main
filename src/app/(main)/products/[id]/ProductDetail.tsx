@@ -1,4 +1,4 @@
-import { getProduct, ProductType } from '@/api/products.api';
+import { getProduct, ProductType } from '@/api/req/products.api';
 import Container from '@/components/Container';
 import ErrorApiMessage from '@/components/ErrorApiMessage';
 import styles from './ProductDetail.module.scss';

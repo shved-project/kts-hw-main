@@ -1,5 +1,5 @@
-import type { ResponseType } from './types/response.type';
-import { api } from './config.api';
+import type { ResponseType } from '../types/response.type';
+import { api } from '../config/config.api';
 import qs from 'qs';
 import { BASE_URL } from '@/config/api';
 

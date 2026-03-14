@@ -7,7 +7,7 @@ import Text from '@/components/Text';
 import Loader from '@/components/Loader';
 import { observer } from 'mobx-react-lite';
 import { useCartStore } from '@/store';
-import { ProductType } from '@/api/products.api';
+import { ProductType } from '@/api/req/products.api';
 import { useRouter } from 'next/navigation';
 import routerData from '@/config/routerData';
 
@@ -66,9 +66,7 @@ const ProductsList = () => {
                 onClick={(e) => handleClickButton(e, product)}
                 disabled={isInCart(product.documentId)}
                 className={
-                  isInCart(product.documentId)
-                    ? styles.buttonInCart
-                    : undefined
+                  isInCart(product.documentId) ? styles.buttonInCart : undefined
                 }
               >
                 {isInCart(product.documentId) ? 'In Cart' : 'Add to Cart'}
