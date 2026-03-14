@@ -11,14 +11,9 @@ import Loader from '@/components/Loader';
 import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {
-  const { user, isLoading, error, registerLoad } = useUserStore();
+  const { isLoading, registerLoad } = useUserStore();
 
   const router = useRouter();
-
-  React.useEffect(() => {
-    console.log(user);
-    console.log(isLoading);
-  }, [user, isLoading]);
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -26,9 +21,9 @@ const RegisterForm = () => {
     const form = event.currentTarget;
     const formData = new FormData(form);
 
-    await registerLoad(formData);
+    const isRegistered = await registerLoad(formData);
 
-    if (!error) {
+    if (isRegistered) {
       router.push('/');
     }
   };

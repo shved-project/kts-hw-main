@@ -24,5 +24,6 @@ export const useRootStore = (): RootStore => {
 export const useCartStore = () => useRootStore().cartStore;
 export const useThemeStore = () => useRootStore().themeStore;
 export const useUserStore = () => useRootStore().userStore;
+export const useToastStore = () => useRootStore().toastStore;
 
 export { rootStore };

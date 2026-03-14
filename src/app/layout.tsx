@@ -6,6 +6,7 @@ import '@/config/configureMobX';
 import { RootStoreProvider } from '@/store';
 import type { Theme } from '@/store/globals/theme';
 import { themeScript } from '@/lib/themeScript';
+import Toast from '@/components/Toast/Toast';
 
 export const metadata: Metadata = {
   title: {
@@ -87,6 +88,7 @@ export default async function RootLayout({
         <div id="root">
           <RootStoreProvider>
             {children}
+            <Toast />
           </RootStoreProvider>
         </div>
       </body>

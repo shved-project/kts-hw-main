@@ -1,6 +1,7 @@
 import { EMAIL, PASSWORD, USERNAME } from '@/api/config/userConfig.api';
 import { register, UserType } from '@/api/req/user.api';
 import { IGlobalStore } from '@/store/interfaces';
+import axios from 'axios';
 import {
   action,
   computed,
@@ -8,13 +9,14 @@ import {
   observable,
   runInAction,
 } from 'mobx';
+import { RootStore } from '../root';
 
 type PrivateFields = '_user' | '_isLoading' | '_error';
 
 export class UserStore implements IGlobalStore {
-  readonly rootStore: object;
+  readonly rootStore: RootStore;
 
-  constructor(rootStore: object) {
+  constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
 
     makeObservable<this, PrivateFields>(this, {
@@ -43,7 +45,7 @@ export class UserStore implements IGlobalStore {
     return this._error;
   }
 
-  registerLoad = async (formData: FormData): Promise<void> => {
+  registerLoad = async (formData: FormData): Promise<boolean> => {
     this._isLoading = true;
     this._error = '';
 
@@ -60,11 +62,8 @@ export class UserStore implements IGlobalStore {
     }
 
     try {
-      const response = await register({
-        email: email,
-        username: username,
-        password: password,
-      });
+      const response = await register({ email, username, password });
+      localStorage.setItem('jwt', response.jwt);
 
       const user = response.user;
 
@@ -75,10 +74,26 @@ export class UserStore implements IGlobalStore {
           id: user.id,
         };
       });
+
+      this.rootStore.toastStore.show('User created', 'success');
+
+      return true;
     } catch (error) {
-      console.log(error);
+      runInAction(() => {
+        if (axios.isAxiosError(error) && error.response?.status === 400) {
+          this._error = 'This user already exists';
+        } else {
+          this._error = 'An unknown error occurred. Please try again later';
+        }
+
+        this.rootStore.toastStore.show(this._error, 'error');
+      });
+
+      return false;
     } finally {
-      this._isLoading = false;
+      runInAction(() => {
+        this._isLoading = false;
+      });
     }
   };
 
@@ -88,9 +103,7 @@ export class UserStore implements IGlobalStore {
     this._error = '';
   };
 
-  init = async (): Promise<boolean> => {
-    return true;
-  };
+  init = async (): Promise<boolean> => true;
 
   destroy = (): void => {
     this.clear();
