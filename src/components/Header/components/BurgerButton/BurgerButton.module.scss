@@ -8,7 +8,7 @@
   background: none;
   border: none;
 
-  @include respond(md) {
+  @include respond(lg) {
     display: flex;
     justify-content: center;
     align-items: center;

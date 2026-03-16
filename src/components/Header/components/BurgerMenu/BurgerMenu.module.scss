@@ -8,7 +8,7 @@
   transform: translate(-50%, -50%);
   transition: background-color $transition-duration $transition-timing-function;
 
-  @include respond(md) {
+  @include respond(lg) {
     display: flex;
     justify-content: end;
     transform: translate(0, 0);
@@ -20,7 +20,7 @@
   }
 
   &--active {
-    @include respond(md) {
+    @include respond(lg) {
       pointer-events: all;
       background-color: #00000033;
 
@@ -35,7 +35,7 @@
   height: inherit;
   transition: transform $transition-duration $transition-timing-function;
 
-  @include respond(md) {
+  @include respond(lg) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -52,7 +52,7 @@
 .nav {
   height: inherit;
 
-  @include respond(md) {
+  @include respond(lg) {
     height: auto;
   }
 }
@@ -63,7 +63,7 @@
   gap: $space-xl;
   list-style: none;
 
-  @include respond(md) {
+  @include respond(lg) {
     flex-direction: column;
   }
 }
@@ -71,7 +71,7 @@
 .userDesktop {
   display: flex;
 
-  @include respond(md) {
+  @include respond(lg) {
     display: none;
   }
 }
@@ -79,7 +79,7 @@
 .userMobile {
   display: none;
 
-  @include respond(md) {
+  @include respond(lg) {
     display: flex;
   }
 }

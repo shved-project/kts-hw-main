@@ -28,6 +28,14 @@ const routerData = {
     href: '/cart',
     create: () => '/cart',
   },
+  login: {
+    href: '/login',
+    create: () => '/login',
+  },
+  register: {
+    href: '/register',
+    create: () => '/register',
+  },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 } satisfies Record<string, Route<any[]>>;
 

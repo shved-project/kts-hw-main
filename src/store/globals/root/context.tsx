@@ -7,11 +7,17 @@ const rootStore = new RootStore();
 
 const RootStoreContext = React.createContext<RootStore | null>(null);
 
-export const RootStoreProvider = ({ children }: React.PropsWithChildren) => (
-  <RootStoreContext.Provider value={rootStore}>
-    {children}
-  </RootStoreContext.Provider>
-);
+export const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
+  React.useEffect(() => {
+    rootStore.userStore.init();
+  }, []);
+
+  return (
+    <RootStoreContext.Provider value={rootStore}>
+      {children}
+    </RootStoreContext.Provider>
+  );
+};
 
 export const useRootStore = (): RootStore => {
   const store = React.useContext(RootStoreContext);

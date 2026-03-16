@@ -146,7 +146,23 @@ export class UserStore implements IGlobalStore {
     this._error = '';
   };
 
-  init = async (): Promise<boolean> => true;
+  init = async (): Promise<boolean> => {
+    const jwt = localStorage.getItem('jwt');
+    const user = localStorage.getItem('user');
+
+    if (jwt && user) {
+      try {
+        runInAction(() => {
+          this._user = JSON.parse(user);
+        });
+      } catch {
+        localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
+      }
+    }
+
+    return true;
+  };
 
   destroy = (): void => {
     this.clear();
