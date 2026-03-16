@@ -1,6 +1,6 @@
 @use '@/styles/mixins' as *;
 
-.loginContainer {
+.container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,7 +8,7 @@
   padding-block: $space-xl;
 }
 
-.loginFormWrapper {
+.formWrapper {
   display: flex;
   flex-direction: column;
   align-items: stretch;
