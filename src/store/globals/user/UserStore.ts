@@ -1,5 +1,5 @@
 import { EMAIL, PASSWORD } from '@/api/config/userConfig.api';
-import { register, UserType } from '@/api/req/user.api';
+import { login, register, UserType } from '@/api/req/user.api';
 import { IGlobalStore } from '@/store/interfaces';
 import axios from 'axios';
 import {
@@ -27,6 +27,7 @@ export class UserStore implements IGlobalStore {
       isLoading: computed,
       error: computed,
       registerLoad: action,
+      loginLoad: action,
       init: action,
     });
   }
@@ -77,6 +78,53 @@ export class UserStore implements IGlobalStore {
       runInAction(() => {
         if (axios.isAxiosError(error) && error.response?.status === 400) {
           this._error = 'This user already exists';
+        } else {
+          this._error = 'An unknown error occurred. Please try again later';
+        }
+
+        this.rootStore.toastStore.show(this._error, 'error');
+      });
+
+      return false;
+    } finally {
+      runInAction(() => {
+        this._isLoading = false;
+      });
+    }
+  };
+
+  loginLoad = async (formData: FormData): Promise<boolean> => {
+    this._isLoading = true;
+    this._error = '';
+
+    const email = formData.get(EMAIL);
+    const password = formData.get(PASSWORD);
+
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      throw new Error('Invalid form data');
+    }
+
+    try {
+      const response = await login({ email, password });
+      const user = response.user;
+
+      localStorage.setItem('jwt', response.jwt);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      runInAction(() => {
+        this._user = {
+          email: user.email,
+          id: user.id,
+        };
+      });
+
+      this.rootStore.toastStore.show('Welcome back!', 'success');
+
+      return true;
+    } catch (error) {
+      runInAction(() => {
+        if (axios.isAxiosError(error) && error.response?.status === 400) {
+          this._error = 'Invalid email or password';
         } else {
           this._error = 'An unknown error occurred. Please try again later';
         }

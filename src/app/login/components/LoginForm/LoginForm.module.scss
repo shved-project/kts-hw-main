@@ -1,0 +1,19 @@
+@use '@/styles/mixins' as *;
+
+.loginFormInputs {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+  margin-bottom: $space-l;
+}
+
+.loginFormButton {
+  display: flex;
+  align-items: center;
+  gap: $space-xxs;
+  margin-inline: auto;
+}
+
+.loginFormLoader {
+  fill: #ffffff;
+}

@@ -26,3 +26,14 @@ export const register = async (
 
   return data;
 };
+
+export const login = async (
+  userParams: RegisterParams
+): Promise<RegisterType> => {
+  const { data } = await api.post('/auth/local', {
+    identifier: userParams.email,
+    password: userParams.password,
+  });
+
+  return data;
+};
