@@ -1,5 +1,5 @@
-const USERNAME = 'username';
 const EMAIL = 'email';
 const PASSWORD = 'password';
+const CONFIRM_PASSWORD = 'confirmPassword';
 
-export { USERNAME, EMAIL, PASSWORD };
+export { EMAIL, PASSWORD, CONFIRM_PASSWORD };

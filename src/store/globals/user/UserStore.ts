@@ -1,4 +1,4 @@
-import { EMAIL, PASSWORD, USERNAME } from '@/api/config/userConfig.api';
+import { EMAIL, PASSWORD } from '@/api/config/userConfig.api';
 import { register, UserType } from '@/api/req/user.api';
 import { IGlobalStore } from '@/store/interfaces';
 import axios from 'axios';
@@ -50,27 +50,22 @@ export class UserStore implements IGlobalStore {
     this._error = '';
 
     const email = formData.get(EMAIL);
-    const username = formData.get(USERNAME);
     const password = formData.get(PASSWORD);
 
-    if (
-      typeof email !== 'string' ||
-      typeof username !== 'string' ||
-      typeof password !== 'string'
-    ) {
+    if (typeof email !== 'string' || typeof password !== 'string') {
       throw new Error('Invalid form data');
     }
 
     try {
-      const response = await register({ email, username, password });
-      localStorage.setItem('jwt', response.jwt);
-
+      const response = await register({ email, password });
       const user = response.user;
+
+      localStorage.setItem('jwt', response.jwt);
+      localStorage.setItem('user', JSON.stringify(user));
 
       runInAction(() => {
         this._user = {
           email: user.email,
-          username: user.username,
           id: user.id,
         };
       });

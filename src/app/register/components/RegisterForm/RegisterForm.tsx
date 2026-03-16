@@ -3,7 +3,7 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import styles from './RegisterForm.module.scss';
-import { EMAIL, PASSWORD, USERNAME } from '@/api/config/userConfig.api';
+import { CONFIRM_PASSWORD, EMAIL, PASSWORD } from '@/api/config/userConfig.api';
 import { useUserStore } from '@/store';
 import React from 'react';
 import { observer } from 'mobx-react-lite';
@@ -31,9 +31,13 @@ const RegisterForm = () => {
   return (
     <form className={styles.registerForm} onSubmit={handleSubmit}>
       <div className={styles.registerFormInputs}>
-        <Input placeholder="Name" name={USERNAME} type="text" />
         <Input placeholder="Email" name={EMAIL} type="email" />
         <Input placeholder="Password" name={PASSWORD} type="password" />
+        <Input
+          placeholder="Confirm password"
+          name={CONFIRM_PASSWORD}
+          type="password"
+        />
       </div>
       <Button
         className={styles.RegisterFormButton}
