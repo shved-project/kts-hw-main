@@ -12,10 +12,10 @@
   text-align: center;
 
   &[data-status='success'] {
-    background-color: #52c41a;
+    background-color: $color-success;
   }
 
   &[data-status='error'] {
-    background-color: #ff4d4f;
+    background-color: $color-error;
   }
 }
