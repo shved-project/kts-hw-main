@@ -1,21 +1,20 @@
 import { ReactNode } from 'react';
 import Container from '@/components/Container';
-import Text from '@/components/Text';
 import styles from './AuthPage.module.scss';
+import Logo from '../Logo';
 
 type AuthPageProps = {
-  title: string;
   children: ReactNode;
 };
 
-const AuthPage = ({ title, children }: AuthPageProps) => {
+const AuthPage = ({ children }: AuthPageProps) => {
   return (
     <section>
       <Container className={styles.container}>
         <div className={styles.formWrapper}>
-          <Text tag="h1" view="title">
-            {title}
-          </Text>
+          <div className={styles.logo}>
+            <Logo size="lg" />
+          </div>
           {children}
         </div>
       </Container>

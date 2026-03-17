@@ -11,6 +11,9 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import Loader from '@/components/Loader';
 import { useRouter } from 'next/navigation';
+import Text from '@/components/Text';
+import Link from 'next/link';
+import routerData from '@/config/routerData';
 
 const RegisterForm = () => {
   const { isLoading, registerLoad } = useUserStore();
@@ -63,6 +66,15 @@ const RegisterForm = () => {
         Register
         {isLoading && <Loader className={styles.RegisterFormLoader} size="s" />}
       </Button>
+      <Text view="p-20">
+        Already registered?{' '}
+        <Link
+          className={styles.RegisterLinkToLogin}
+          href={routerData.login.href}
+        >
+          Sign in
+        </Link>
+      </Text>
     </form>
   );
 };

@@ -12,8 +12,13 @@
   align-items: center;
   gap: $space-xxs;
   margin-inline: auto;
+  margin-bottom: $space-l;
 }
 
 .RegisterFormLoader {
   fill: #ffffff;
+}
+
+.RegisterLinkToLogin {
+  text-decoration: underline;
 }

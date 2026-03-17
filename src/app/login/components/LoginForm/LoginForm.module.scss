@@ -12,8 +12,13 @@
   align-items: center;
   gap: $space-xxs;
   margin-inline: auto;
+  margin-bottom: $space-l;
 }
 
 .loginFormLoader {
   fill: #ffffff;
+}
+
+.loginLinkToReg {
+  text-decoration: underline;
 }
