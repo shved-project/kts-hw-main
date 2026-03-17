@@ -119,6 +119,7 @@ export class UserStore implements IGlobalStore {
       });
 
       this.rootStore.toastStore.show('Welcome back!', 'success');
+      this.rootStore.cartStore.init();
 
       return true;
     } catch (error) {

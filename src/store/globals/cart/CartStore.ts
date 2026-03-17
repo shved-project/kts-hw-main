@@ -1,18 +1,21 @@
 import type { ProductType } from '@/api/req/products.api';
 import { makeObservable, observable, computed, action } from 'mobx';
 import type { IGlobalStore } from '@/store/interfaces';
-
-export type CartItemType = {
-  product: ProductType;
-  quantity: number;
-};
+import {
+  addToCart,
+  CartItemType,
+  getCart,
+  removeFromCart,
+} from '@/api/req/cart.api';
+import axios from 'axios';
+import { RootStore } from '../root';
 
 type PrivateFields = '_items';
 
 export class CartStore implements IGlobalStore {
-  readonly rootStore: object;
+  readonly rootStore: RootStore;
 
-  constructor(rootStore: object) {
+  constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeObservable<this, PrivateFields>(this, {
       _items: observable,
@@ -21,8 +24,8 @@ export class CartStore implements IGlobalStore {
       totalPrice: computed,
       addItem: action,
       removeItem: action,
+      removeOneItem: action,
       increaseQuantity: action,
-      decreaseQuantity: action,
       clear: action,
       init: action,
       destroy: action,
@@ -50,35 +53,116 @@ export class CartStore implements IGlobalStore {
     return this._items.some((item) => item.product.documentId === documentId);
   };
 
-  addItem = (product: ProductType, quantity: number = 1): void => {
-    const existing = this._items.find(
-      (item) => item.product.documentId === product.documentId
-    );
+  private handleAuthError = (error: unknown): boolean => {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status === 401 || status === 403) {
+        this.rootStore.toastStore.show(
+          'Please log in to manage your cart',
+          'error'
+        );
+        return true;
+      }
+    }
+    return false;
+  };
+
+  addItem = async (
+    product: ProductType,
+    quantity: number = 1
+  ): Promise<{ success: boolean; notAuthorized: boolean }> => {
+    const existing = this._items.find((item) => item.product.id === product.id);
+    const originalQuantity = existing?.quantity || 0;
+
     if (existing) {
       existing.quantity += quantity;
     } else {
       this._items.push({ product, quantity });
     }
-  };
 
-  removeItem = (documentId: string): void => {
-    this._items = this._items.filter(
-      (item) => item.product.documentId !== documentId
-    );
-  };
+    try {
+      await addToCart(product.id, quantity);
+      return { success: true, notAuthorized: false };
+    } catch (error) {
+      if (existing) {
+        existing.quantity = originalQuantity;
+      } else {
+        this._items = this._items.filter(
+          (item) => item.product.id !== product.id
+        );
+      }
 
-  increaseQuantity = (documentId: string): void => {
-    const item = this._items.find((i) => i.product.documentId === documentId);
-    if (item) item.quantity++;
-  };
+      if (this.handleAuthError(error)) {
+        return { success: false, notAuthorized: true };
+      }
 
-  decreaseQuantity = (documentId: string): void => {
-    const item = this._items.find((i) => i.product.documentId === documentId);
-    if (!item) return;
-    item.quantity = Math.max(0, item.quantity - 1);
-    if (item.quantity === 0) {
-      this.removeItem(documentId);
+      this.rootStore.toastStore.show(
+        'Failed to add item to cart. Please try again.',
+        'error'
+      );
+      return { success: false, notAuthorized: false };
     }
+  };
+
+  removeOneItem = async (id: number): Promise<void> => {
+    const itemIndex = this._items.findIndex((item) => item.product.id === id);
+    if (itemIndex === -1) return;
+
+    const item = this._items[itemIndex];
+
+    const originalItems = [...this._items];
+
+    if (item.quantity > 1) {
+      item.quantity -= 1;
+    } else {
+      this._items.splice(itemIndex, 1);
+    }
+
+    try {
+      await removeFromCart(id, 1);
+    } catch (error) {
+      this._items = originalItems;
+
+      if (!this.handleAuthError(error)) {
+        this.rootStore.toastStore.show(
+          'Failed to remove the item from your cart. Please try again.',
+          'error'
+        );
+      }
+    }
+  };
+
+  removeItem = async (id: number): Promise<void> => {
+    const itemExists = this._items.find((item) => item.product.id === id);
+    if (!itemExists) return;
+
+    const originalItems = [...this._items];
+
+    this._items = this._items.filter((item) => item.product.id !== id);
+
+    try {
+      await removeFromCart(id, itemExists.quantity);
+    } catch (error) {
+      this._items = originalItems;
+
+      if (!this.handleAuthError(error)) {
+        this.rootStore.toastStore.show(
+          'Failed to remove the item from your cart. Please try again.',
+          'error'
+        );
+      }
+    }
+  };
+
+  increaseQuantity = (id: number): void => {
+    const item = this._items.find((i) => i.product.id === id);
+    if (item) {
+      this.addItem(item.product, 1);
+    }
+  };
+
+  decreaseQuantity = (id: number): void => {
+    this.removeOneItem(id);
   };
 
   clear = (): void => {
@@ -86,6 +170,22 @@ export class CartStore implements IGlobalStore {
   };
 
   init = async (): Promise<boolean> => {
+    if (!this.rootStore.userStore.user) {
+      this.clear();
+      return true;
+    }
+
+    try {
+      const response = await getCart();
+      this._items = response;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 401 || status === 403) {
+          this.clear();
+        }
+      }
+    }
     return true;
   };
 

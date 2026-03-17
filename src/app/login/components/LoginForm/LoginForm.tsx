@@ -17,6 +17,8 @@ const LoginForm = () => {
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    if (isLoading) return;
+
     const formData = new FormData(event.currentTarget);
     const isLoggedIn = await loginLoad(formData);
 

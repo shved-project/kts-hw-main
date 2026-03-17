@@ -34,11 +34,15 @@ const ProductsList = () => {
   );
 
   const handleClickButton = React.useCallback(
-    (event: React.MouseEvent, product: ProductType) => {
+    async (event: React.MouseEvent, product: ProductType) => {
       event.stopPropagation();
-      addItem(product);
+      const { success, notAuthorized } = await addItem(product);
+
+      if (!success && notAuthorized) {
+        router.push(routerData.login.href);
+      }
     },
-    [addItem]
+    [addItem, router]
   );
 
   return (

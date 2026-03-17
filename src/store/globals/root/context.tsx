@@ -10,6 +10,7 @@ const RootStoreContext = React.createContext<RootStore | null>(null);
 export const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
   React.useEffect(() => {
     rootStore.userStore.init();
+    rootStore.cartStore.init();
   }, []);
 
   return (

@@ -1,10 +1,11 @@
 import React from 'react';
-import { CartItemType, useCartStore } from '@/store';
+import { useCartStore } from '@/store';
 import styles from './CartItem.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import routerData from '@/config/routerData';
 import Text from '@/components/Text';
+import { CartItemType } from '@/api/req/cart.api';
 
 type CartItemProps = {
   item: CartItemType;
@@ -14,16 +15,16 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
   const { increaseQuantity, decreaseQuantity, removeItem } = useCartStore();
 
   const handleDecrease = React.useCallback(() => {
-    decreaseQuantity(item.product.documentId);
-  }, [decreaseQuantity, item.product.documentId]);
+    decreaseQuantity(item.product.id);
+  }, [decreaseQuantity, item.product.id]);
 
   const handleIncrease = React.useCallback(() => {
-    increaseQuantity(item.product.documentId);
-  }, [increaseQuantity, item.product.documentId]);
+    increaseQuantity(item.product.id);
+  }, [increaseQuantity, item.product.id]);
 
   const handleRemove = React.useCallback(() => {
-    removeItem(item.product.documentId);
-  }, [removeItem, item.product.documentId]);
+    removeItem(item.product.id);
+  }, [removeItem, item.product.id]);
 
   return (
     <li key={item.product.documentId} className={styles.item}>
