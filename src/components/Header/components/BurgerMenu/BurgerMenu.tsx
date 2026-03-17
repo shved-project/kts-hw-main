@@ -43,6 +43,7 @@ const BurgerMenu = () => {
         ref={headerNavWrapperRef}
       >
         <div className={styles.navBgMobile}>
+          <UserLinks className={styles.userMobile} />
           <nav className={styles.nav}>
             <ul className={styles.navList}>
               {headerNav.map((link) => (
@@ -54,7 +55,6 @@ const BurgerMenu = () => {
               ))}
             </ul>
           </nav>
-          <UserLinks className={styles.userMobile} />
         </div>
       </div>
       <UserLinks className={styles.userDesktop} />

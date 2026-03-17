@@ -2,7 +2,7 @@
 
 .user {
   align-items: center;
-  gap: $space-m;
+  gap: $space-l;
 
   :global([data-theme='dark']) & img {
     filter: invert(1);

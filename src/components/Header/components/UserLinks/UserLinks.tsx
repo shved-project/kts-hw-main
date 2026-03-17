@@ -26,7 +26,7 @@ const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
     <div className={classNames(styles.user, className)}>
       <ToggleTheme />
       {user ? (
-        <>
+        <div className={styles.authLinks}>
           <Link
             href={routerData.cart.href}
             className={styles.cartLink}
@@ -43,7 +43,7 @@ const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
             alt="Profile"
             aria-label="Profile"
           />
-        </>
+        </div>
       ) : (
         <div className={styles.authLinks}>
           <Link href={routerData.login.href}>
