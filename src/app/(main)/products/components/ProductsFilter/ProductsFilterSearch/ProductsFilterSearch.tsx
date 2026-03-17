@@ -63,7 +63,7 @@ const ProductsFilterSearch = () => {
     document.addEventListener('keydown', handleClickEnter);
 
     return () => {
-      document.removeEventListener('keydown', handleClickButton);
+      document.removeEventListener('keydown', handleClickEnter);
     };
   }, [handleClickButton, setSearchParam]);
 

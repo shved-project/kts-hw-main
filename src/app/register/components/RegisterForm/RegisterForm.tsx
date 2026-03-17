@@ -17,12 +17,9 @@ const RegisterForm = () => {
   const router = useRouter();
   const formStore = useLocalStore(() => new RegisterFormStore());
 
-  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
+  const handleAction = async (formData: FormData) => {
     if (!formStore.validateAll()) return;
 
-    const formData = new FormData(event.currentTarget);
     const isRegistered = await registerLoad(formData);
 
     if (isRegistered) {
@@ -31,7 +28,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <form className={styles.registerForm} onSubmit={handleSubmit}>
+    <form action={handleAction} className={styles.registerForm}>
       <div className={styles.registerFormInputs}>
         <Input
           placeholder="Email"
