@@ -1,0 +1,28 @@
+@use '@/styles/mixins' as *;
+
+.profile {
+  margin-block: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-xl;
+
+  :global([data-theme='dark']) & img {
+    filter: invert(1);
+  }
+}
+
+.profileDataWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-s;
+}
+
+.profileExit {
+  background-color: $color-error;
+
+  &:hover {
+    background-color: $color-error !important;
+  }
+}

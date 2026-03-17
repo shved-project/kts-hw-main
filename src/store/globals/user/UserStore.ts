@@ -11,7 +11,7 @@ import {
 } from 'mobx';
 import { RootStore } from '../root';
 
-type PrivateFields = '_user' | '_isLoading' | '_error';
+type PrivateFields = '_user' | '_isLoading' | '_error' | '_initLoading';
 
 export class UserStore implements IGlobalStore {
   readonly rootStore: RootStore;
@@ -23,18 +23,22 @@ export class UserStore implements IGlobalStore {
       _user: observable,
       _isLoading: observable,
       _error: observable,
+      _initLoading: observable,
       user: computed,
       isLoading: computed,
       error: computed,
+      initLoading: computed,
       registerLoad: action,
       loginLoad: action,
       init: action,
+      logOut: action.bound,
     });
   }
 
   private _user: UserType | null = null;
   private _isLoading: boolean = false;
   private _error: string = '';
+  private _initLoading: boolean = true;
 
   get user(): UserType | null {
     return this._user;
@@ -44,6 +48,9 @@ export class UserStore implements IGlobalStore {
   }
   get error(): string {
     return this._error;
+  }
+  get initLoading(): boolean {
+    return this._initLoading;
   }
 
   registerLoad = async (formData: FormData): Promise<boolean> => {
@@ -141,10 +148,19 @@ export class UserStore implements IGlobalStore {
     }
   };
 
+  logOut = (): void => {
+    this.clear();
+    this.rootStore.cartStore.clear();
+
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('user');
+  };
+
   clear = (): void => {
     this._user = null;
     this._isLoading = false;
     this._error = '';
+    this._initLoading = true;
   };
 
   init = async (): Promise<boolean> => {
@@ -161,6 +177,8 @@ export class UserStore implements IGlobalStore {
         localStorage.removeItem('user');
       }
     }
+
+    this._initLoading = false;
 
     return true;
   };

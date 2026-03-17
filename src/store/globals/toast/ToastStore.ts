@@ -19,7 +19,7 @@ export class ToastStore implements IGlobalStore {
       message: observable,
       status: observable,
       isVisible: observable,
-      show: action,
+      show: action.bound,
       hide: action,
       clear: action,
     });
@@ -28,7 +28,7 @@ export class ToastStore implements IGlobalStore {
   show(
     message: string,
     status: ToastStatus = 'success',
-    duration: number = 3000
+    duration: number = 5000
   ) {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);

@@ -27,7 +27,8 @@
     left: 0;
     height: 2px;
     width: 100%;
-    transition: background-color $transition-duration $transition-timing-function;
+    transition: background-color $transition-duration
+      $transition-timing-function;
   }
 
   &--active {
@@ -50,7 +51,4 @@
       font-weight: 600;
     }
   }
-}
-
-.navLinkText {
 }
