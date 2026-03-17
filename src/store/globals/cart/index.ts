@@ -1,1 +1,1 @@
-export { CartStore, type CartItemType } from './CartStore';
+export { CartStore } from './CartStore';
