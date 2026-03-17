@@ -9,16 +9,13 @@
   }
 }
 
-.authButtons {
+.authLinks {
   display: flex;
   align-items: center;
   gap: $space-s;
 }
 
 .authButton {
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
   white-space: nowrap;
   min-height: unset;
 }

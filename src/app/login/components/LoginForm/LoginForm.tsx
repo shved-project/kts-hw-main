@@ -8,6 +8,7 @@ import { useUserStore } from '@/store';
 import React from 'react';
 import Loader from '@/components/Loader';
 import { useRouter } from 'next/navigation';
+import { observer } from 'mobx-react-lite';
 
 const LoginForm = () => {
   const { isLoading, loginLoad } = useUserStore();
@@ -42,4 +43,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default observer(LoginForm);

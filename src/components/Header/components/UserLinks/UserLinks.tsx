@@ -12,6 +12,7 @@ import { useCartStore, useUserStore } from '@/store/root';
 import { observer } from 'mobx-react-lite';
 import Link from 'next/link';
 import Image from 'next/image';
+import Text from '@/components/Text';
 
 type UserLinksProps = {
   className?: string;
@@ -24,34 +25,38 @@ const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
   return (
     <div className={classNames(styles.user, className)}>
       <ToggleTheme />
-      <Link
-        href={routerData.cart.href}
-        className={styles.cartLink}
-        aria-label="Cart"
-      >
-        <Image src={bagIcon} alt="Cart" />
-        {totalCount > 0 && (
-          <span className={styles.cartBadge}>{totalCount}</span>
-        )}
-      </Link>
       {user ? (
-        <UserLink
-          href={routerData.profile.href}
-          image={userIcon}
-          alt="Profile"
-          aria-label="Profile"
-        />
+        <>
+          <Link
+            href={routerData.cart.href}
+            className={styles.cartLink}
+            aria-label="Cart"
+          >
+            <Image src={bagIcon} alt="Cart" />
+            {totalCount > 0 && (
+              <span className={styles.cartBadge}>{totalCount}</span>
+            )}
+          </Link>
+          <UserLink
+            href={routerData.profile.href}
+            image={userIcon}
+            alt="Profile"
+            aria-label="Profile"
+          />
+        </>
       ) : (
-        <div className={styles.authButtons}>
+        <div className={styles.authLinks}>
           <Link href={routerData.login.href}>
-            <Button
-              className={`${styles.authButtonLogin} ${styles.authButton}`}
-            >
+            <Text view="p-14" weight="semiBold" tag="span">
               Sign In
-            </Button>
+            </Text>
           </Link>
           <Link href={routerData.register.href}>
-            <Button className={styles.authButton}>Sign Up</Button>
+            <Button className={styles.authButton}>
+              <Text view="p-14" weight="semiBold" tag="span">
+                Sign Up
+              </Text>
+            </Button>
           </Link>
         </div>
       )}
