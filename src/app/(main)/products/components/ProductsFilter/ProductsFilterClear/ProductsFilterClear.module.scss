@@ -1,0 +1,6 @@
+@use '@/styles/mixins' as *;
+
+.button {
+  background-color: $color-text-secondary;
+  width: max-content;
+}

@@ -55,6 +55,8 @@ export class ProductsStore implements ILocalStore {
       setCurrentCategoryId: action.bound,
       loadCategories: action.bound,
       setOpenCategoriesDropdown: action.bound,
+      clearFilters: action,
+      clearFiltersAndReload: action.bound,
       destroy: action.bound,
     });
   }
@@ -172,6 +174,17 @@ export class ProductsStore implements ILocalStore {
 
   setOpenCategoriesDropdown(isOpen: boolean) {
     this._isOpenCategoriesDropdown = isOpen;
+  }
+
+  clearFilters() {
+    this._searchParam = '';
+    this._currentCategoryId = null;
+
+    this.clearProductsList();
+  }
+  clearFiltersAndReload() {
+    this.clearFilters();
+    this.loadProductsList();
   }
 
   destroy: VoidFunction = () => {
