@@ -13,17 +13,17 @@ import routerData from '@/config/routerData';
 
 const Cart: React.FC = () => {
   const { items, totalCount, totalPrice } = useCartStore();
-  const { user } = useUserStore();
+  const { user, initLoading } = useUserStore();
   const { show } = useToastStore();
 
   const router = useRouter();
 
   React.useEffect(() => {
-    if (!user) {
+    if (!user && !initLoading) {
       show('You need to log in to view the cart page', 'error');
       router.push(routerData.login.href);
     }
-  }, [router, user, show]);
+  }, [router, user, show, initLoading]);
 
   if (items.length === 0) {
     return <EmptyCart />;
