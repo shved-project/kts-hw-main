@@ -16,15 +16,17 @@ const EmptyCart = () => {
   return (
     <section className={styles.cart}>
       <Container>
-        <Text view="title" tag="h1" className={styles.title}>
-          Cart
-        </Text>
-        <Text view="p-20" color="secondary">
-          Your cart is empty
-        </Text>
-        <Button className={styles.back} onClick={handleGoToProducts}>
-          Go to Products
-        </Button>
+        <div className={styles.cartEmptyWrapper}>
+          <div className={styles.cartEmptyText}>
+            <Text view="title" tag="h1">
+              Cart
+            </Text>
+            <Text view="p-20" color="secondary">
+              Your cart is empty
+            </Text>
+          </div>
+          <Button onClick={handleGoToProducts}>Go to Products</Button>
+        </div>
       </Container>
     </section>
   );
