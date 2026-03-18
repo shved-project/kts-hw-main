@@ -23,6 +23,7 @@
     "qs": "^6.15.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-loading-skeleton": "^3.5.0",
     "sass": "^1.97.3",
     "swiper": "^12.1.2"
   },

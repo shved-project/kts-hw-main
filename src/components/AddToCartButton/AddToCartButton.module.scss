@@ -1,0 +1,55 @@
+@use '@/styles/mixins' as *;
+
+.buttonCart {
+  background: none;
+  color: $color-text-primary;
+  border: 1px solid $color-text-secondary;
+  transition: $transition-duration $transition-timing-function;
+
+  &:not(:disabled):hover {
+    background: none;
+    color: $color-text-secondary;
+  }
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-xxs;
+  border: 1px solid $color-text-secondary;
+  border-radius: 8px;
+  padding: 0 $space-xxs;
+  height: 42px;
+  max-width: 180px;
+}
+
+.quantityBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  background: none;
+  color: $color-text-primary;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: $transition-duration $transition-timing-function;
+  flex-shrink: 0;
+
+  &:hover {
+    color: $color-text-secondary;
+  }
+}
+
+.quantity {
+  font-size: 16px;
+  font-weight: 500;
+  color: $color-text-primary;
+  min-width: 20px;
+  text-align: center;
+  flex: 1;
+}

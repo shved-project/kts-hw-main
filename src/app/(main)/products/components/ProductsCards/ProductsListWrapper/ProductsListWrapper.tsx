@@ -2,12 +2,13 @@ import React from 'react';
 import { useProductsStore } from '@/store/locals/products';
 import { observer } from 'mobx-react-lite';
 import ProductsList from '../ProductsList';
-import Loader from '@/components/Loader';
+import ProductsListSkeleton from '../ProductsList/ProductsListSkeleton';
 import styles from './ProductsListWrapper.module.scss';
 import Text from '@/components/Text';
 import ErrorApiMessage from '@/components/ErrorApiMessage';
 import { useSearchParams } from 'next/navigation';
 import { PRODUCTS_CATEGORY, PRODUCTS_SEARCH } from '@/config/queryParams';
+import { PAGE_SIZE } from '@/api/req/products.api';
 
 const ProductsListWrapper = () => {
   const {
@@ -33,11 +34,7 @@ const ProductsListWrapper = () => {
   }, [loadProductsList]);
 
   if (isInitLoading) {
-    return (
-      <div className={styles.loaderWrapper}>
-        <Loader className={styles.loader} />
-      </div>
-    );
+    return <ProductsListSkeleton count={PAGE_SIZE} showTitle />;
   }
 
   if (isEmptySearchResult) {

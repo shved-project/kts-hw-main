@@ -25,41 +25,41 @@ const UserLinks: React.FC<UserLinksProps> = ({ className }) => {
   return (
     <div className={classNames(styles.user, className)}>
       <ToggleTheme />
-      {user ? (
-        <div className={styles.authLinks}>
-          <Link
-            href={routerData.cart.href}
-            className={styles.cartLink}
-            aria-label="Cart"
-          >
-            <Image src={bagIcon} alt="Cart" />
-            {totalCount > 0 && (
-              <span className={styles.cartBadge}>{totalCount}</span>
-            )}
-          </Link>
+      <div className={styles.authLinks}>
+        <Link
+          href={routerData.cart.href}
+          className={styles.cartLink}
+          aria-label="Cart"
+        >
+          <Image src={bagIcon} alt="Cart" />
+          {totalCount > 0 && (
+            <span className={styles.cartBadge}>{totalCount}</span>
+          )}
+        </Link>
+        {user ? (
           <UserLink
             href={routerData.profile.href}
             image={userIcon}
             alt="Profile"
             aria-label="Profile"
           />
-        </div>
-      ) : (
-        <div className={styles.authLinks}>
-          <Link href={routerData.login.href}>
-            <Text view="p-14" weight="semiBold" tag="span">
-              Sign In
-            </Text>
-          </Link>
-          <Link href={routerData.register.href}>
-            <Button className={styles.authButton}>
+        ) : (
+          <>
+            <Link href={routerData.login.href}>
               <Text view="p-14" weight="semiBold" tag="span">
-                Sign Up
+                Sign In
               </Text>
-            </Button>
-          </Link>
-        </div>
-      )}
+            </Link>
+            <Link href={routerData.register.href}>
+              <Button className={styles.authButton}>
+                <Text view="p-14" weight="semiBold" tag="span">
+                  Sign Up
+                </Text>
+              </Button>
+            </Link>
+          </>
+        )}
+      </div>
     </div>
   );
 };

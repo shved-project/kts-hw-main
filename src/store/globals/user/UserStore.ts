@@ -79,6 +79,7 @@ export class UserStore implements IGlobalStore {
       });
 
       this.rootStore.toastStore.show('User created', 'success');
+      await this.rootStore.cartStore.mergeGuestCart();
 
       return true;
     } catch (error) {
@@ -126,7 +127,7 @@ export class UserStore implements IGlobalStore {
       });
 
       this.rootStore.toastStore.show('Welcome back!', 'success');
-      this.rootStore.cartStore.init();
+      await this.rootStore.cartStore.mergeGuestCart();
 
       return true;
     } catch (error) {

@@ -16,6 +16,8 @@ import {
 import axios from 'axios';
 import { RootStore } from '../root';
 
+const GUEST_CART_KEY = 'guest_cart';
+
 type PrivateFields =
   | '_items'
   | 'updateItemQuantity'
@@ -49,6 +51,10 @@ export class CartStore implements IGlobalStore {
 
   private _items: CartItemType[] = [];
 
+  private get isGuest(): boolean {
+    return !this.rootStore.userStore.user;
+  }
+
   get items(): CartItemType[] {
     return this._items;
   }
@@ -68,7 +74,35 @@ export class CartStore implements IGlobalStore {
     return this._items.some((item) => item.product.documentId === documentId);
   };
 
-  private handleAuthError = (error: unknown): boolean => {
+  private _saveToLocalStorage = (): void => {
+    try {
+      localStorage.setItem(GUEST_CART_KEY, JSON.stringify(this._items));
+    } catch {
+      /* localStorage may be unavailable */
+    }
+  };
+
+  private _loadFromLocalStorage = (): CartItemType[] => {
+    try {
+      const raw = localStorage.getItem(GUEST_CART_KEY);
+      if (raw) {
+        return JSON.parse(raw) as CartItemType[];
+      }
+    } catch {
+      /* corrupted data or unavailable */
+    }
+    return [];
+  };
+
+  private _clearLocalStorage = (): void => {
+    try {
+      localStorage.removeItem(GUEST_CART_KEY);
+    } catch {
+      /* localStorage may be unavailable */
+    }
+  };
+
+  private handleApiError = (error: unknown, message: string): void => {
     if (axios.isAxiosError(error)) {
       const status = error.response?.status;
       if (status === 401 || status === 403) {
@@ -76,10 +110,10 @@ export class CartStore implements IGlobalStore {
           'Please log in to manage your cart',
           'error'
         );
-        return true;
+        return;
       }
     }
-    return false;
+    this.rootStore.toastStore.show(message, 'error');
   };
 
   private updateItemQuantity = action(
@@ -100,18 +134,11 @@ export class CartStore implements IGlobalStore {
     this._items = items;
   });
 
-  private updateItems = action(
-    (updater: (items: CartItemType[]) => CartItemType[]) => {
-      this._items = updater(this._items);
-    }
-  );
-
   addItem = async (
     product: ProductType,
     quantity: number = 1
-  ): Promise<{ success: boolean; notAuthorized: boolean }> => {
+  ): Promise<{ success: boolean }> => {
     const existing = this._items.find((item) => item.product.id === product.id);
-    // const originalQuantity = existing?.quantity || 0;
     const originalItems = [...this._items];
 
     if (existing) {
@@ -120,23 +147,23 @@ export class CartStore implements IGlobalStore {
       this.addNewItem(product, quantity);
     }
 
+    if (this.isGuest) {
+      this._saveToLocalStorage();
+      return { success: true };
+    }
+
     try {
       await addToCart(product.id, quantity);
-      return { success: true, notAuthorized: false };
+      return { success: true };
     } catch (error) {
       runInAction(() => {
         this._items = originalItems;
       });
-
-      if (this.handleAuthError(error)) {
-        return { success: false, notAuthorized: true };
-      }
-
-      this.rootStore.toastStore.show(
-        'Failed to add item to cart. Please try again.',
-        'error'
+      this.handleApiError(
+        error,
+        'Failed to add item to cart. Please try again.'
       );
-      return { success: false, notAuthorized: false };
+      return { success: false };
     }
   };
 
@@ -144,13 +171,18 @@ export class CartStore implements IGlobalStore {
     const itemIndex = this._items.findIndex((item) => item.product.id === id);
     if (itemIndex === -1) return;
 
-    const item = this._items[itemIndex];
     const originalItems = [...this._items];
+    const item = this._items[itemIndex];
 
     if (item.quantity > 1) {
       this.updateItemQuantity(item, item.quantity - 1);
     } else {
       this.removeItemAtIndex(itemIndex);
+    }
+
+    if (this.isGuest) {
+      this._saveToLocalStorage();
+      return;
     }
 
     try {
@@ -159,13 +191,10 @@ export class CartStore implements IGlobalStore {
       runInAction(() => {
         this._items = originalItems;
       });
-
-      if (!this.handleAuthError(error)) {
-        this.rootStore.toastStore.show(
-          'Failed to remove the item from your cart. Please try again.',
-          'error'
-        );
-      }
+      this.handleApiError(
+        error,
+        'Failed to remove the item from your cart. Please try again.'
+      );
     }
   };
 
@@ -178,19 +207,21 @@ export class CartStore implements IGlobalStore {
 
     this.setItems(this._items.filter((item) => item.product.id !== id));
 
+    if (this.isGuest) {
+      this._saveToLocalStorage();
+      return;
+    }
+
     try {
       await removeFromCart(id, itemQuantity);
     } catch (error) {
       runInAction(() => {
         this._items = originalItems;
       });
-
-      if (!this.handleAuthError(error)) {
-        this.rootStore.toastStore.show(
-          'Failed to remove the item from your cart. Please try again.',
-          'error'
-        );
-      }
+      this.handleApiError(
+        error,
+        'Failed to remove the item from your cart. Please try again.'
+      );
     }
   };
 
@@ -209,9 +240,40 @@ export class CartStore implements IGlobalStore {
     this._items = [];
   });
 
+  mergeGuestCart = async (): Promise<void> => {
+    const guestItems = this._loadFromLocalStorage();
+
+    if (guestItems.length === 0) {
+      await this.init();
+      return;
+    }
+
+    try {
+      for (const item of guestItems) {
+        await addToCart(item.product.id, item.quantity);
+      }
+    } catch {
+      /* partial merge is acceptable — server has what it received */
+    }
+
+    this._clearLocalStorage();
+
+    try {
+      const response = await getCart();
+      runInAction(() => {
+        this._items = response;
+      });
+    } catch {
+      /* cart will load on next init */
+    }
+  };
+
   init = async (): Promise<boolean> => {
-    if (!this.rootStore.userStore.user) {
-      this.clear();
+    if (this.isGuest) {
+      const guestItems = this._loadFromLocalStorage();
+      runInAction(() => {
+        this._items = guestItems;
+      });
       return true;
     }
 
@@ -224,7 +286,11 @@ export class CartStore implements IGlobalStore {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
         if (status === 401 || status === 403) {
-          this.clear();
+          this.rootStore.userStore.logOut();
+          const guestItems = this._loadFromLocalStorage();
+          runInAction(() => {
+            this._items = guestItems;
+          });
         }
       }
     }

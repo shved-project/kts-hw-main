@@ -1,0 +1,35 @@
+@use '@/styles/variables' as *;
+
+.button {
+  position: fixed;
+  right: $space-m;
+  bottom: $space-m;
+  z-index: $z-40;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+
+  color: $color-button-primary-text;
+  background-color: $color-brand;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+
+  transition:
+    background-color $transition-duration $transition-timing-function,
+    box-shadow $transition-duration $transition-timing-function;
+
+  &:hover {
+    background-color: $color-brand-hover;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.24);
+  }
+
+  &:active {
+    background-color: $color-brand-active;
+  }
+}

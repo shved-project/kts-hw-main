@@ -1,0 +1,80 @@
+@use '@/styles/mixins' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-m;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-xxs;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: $color-text-secondary;
+}
+
+.paymentToggle {
+  display: flex;
+  border: 1px solid $color-text-secondary;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.paymentOption {
+  flex: 1;
+  padding: $space-xs $space-s;
+  border: none;
+  background: none;
+  color: $color-text-secondary;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color $transition-duration $transition-timing-function,
+    color $transition-duration $transition-timing-function;
+
+  &:not(:last-child) {
+    border-right: 1px solid $color-text-secondary;
+  }
+
+  &_active {
+    background-color: $color-brand;
+    color: $color-button-primary-text;
+  }
+}
+
+.cardFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-s;
+  overflow: hidden;
+  padding: 1px;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    margin-top 0.3s ease;
+  margin-top: 0;
+
+  &_visible {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: $space-s;
+  }
+}
+
+.cardNumberField {
+  grid-column: 1 / -1;
+}
+
+.submitBtn {
+  margin-top: $space-xxs;
+}

@@ -3,7 +3,7 @@ import type { ProductType } from '@/api/req/products.api';
 import Text from '@/components/Text';
 import styles from './ProductInfo.module.scss';
 import Button from '@/components/Button';
-import AddToCartButton from '../AddToCartButton';
+import AddToCartButton from '@/components/AddToCartButton';
 
 type ProductInfoProps = {
   product: ProductType;

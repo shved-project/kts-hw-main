@@ -2,19 +2,17 @@ import React from 'react';
 import { useProductsStore } from '@/store/locals/products';
 import styles from './ProductsList.module.scss';
 import Card from '@/components/Card';
-import Button from '@/components/Button';
 import Text from '@/components/Text';
-import Loader from '@/components/Loader';
+import ProductsListSkeleton from './ProductsListSkeleton';
 import { observer } from 'mobx-react-lite';
-import { useCartStore } from '@/store';
-import { ProductType } from '@/api/req/products.api';
+import { PAGE_SIZE } from '@/api/req/products.api';
 import { useRouter } from 'next/navigation';
 import routerData from '@/config/routerData';
+import AddToCartButton from '@/components/AddToCartButton';
 
 const ProductsList = () => {
   const { productsList, total, isAllLoadProducts, setupInfiniteScroll } =
     useProductsStore();
-  const { addItem, isInCart } = useCartStore();
 
   const router = useRouter();
 
@@ -31,18 +29,6 @@ const ProductsList = () => {
       router.push(routerData.product.create(id));
     },
     [router]
-  );
-
-  const handleClickButton = React.useCallback(
-    async (event: React.MouseEvent, product: ProductType) => {
-      event.stopPropagation();
-      const { success, notAuthorized } = await addItem(product);
-
-      if (!success && notAuthorized) {
-        router.push(routerData.login.href);
-      }
-    },
-    [addItem, router]
   );
 
   return (
@@ -66,15 +52,9 @@ const ProductsList = () => {
             subtitle={product.description}
             captionSlot={product.productCategory.title}
             actionSlot={
-              <Button
-                onClick={(e) => handleClickButton(e, product)}
-                disabled={isInCart(product.documentId)}
-                className={
-                  isInCart(product.documentId) ? styles.buttonInCart : undefined
-                }
-              >
-                {isInCart(product.documentId) ? 'In Cart' : 'Add to Cart'}
-              </Button>
+              <div onClick={(e) => e.stopPropagation()}>
+                <AddToCartButton product={product} />
+              </div>
             }
             contentSlot={
               <Text weight="bold" view="p-18">
@@ -87,8 +67,10 @@ const ProductsList = () => {
         ))}
       </div>
       {!isAllLoadProducts && (
-        <div className={styles.loaderWrapper} ref={loaderRef}>
-          <Loader className={styles.loader} />
+        <div ref={loaderRef}>
+          <ProductsListSkeleton
+            count={Math.min(PAGE_SIZE, total - productsList.length)}
+          />
         </div>
       )}
     </>

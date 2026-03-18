@@ -1,0 +1,66 @@
+@use '@/styles/mixins' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: $z-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  padding: $space-m;
+
+  &_visible {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  background-color: $color-body-bg;
+  border-radius: 12px;
+  padding: $space-l;
+  max-width: 520px;
+  width: 100%;
+  max-height: calc(100vh - #{$space-xl} * 2);
+  overflow-y: auto;
+  transform: translateY(20px);
+  transition: transform 0.2s ease;
+
+  .overlay_visible & {
+    transform: translateY(0);
+  }
+
+  @include respond(sm) {
+    padding: $space-m;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $space-m;
+}
+
+.closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  color: $color-text-secondary;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color $transition-duration $transition-timing-function;
+  flex-shrink: 0;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
