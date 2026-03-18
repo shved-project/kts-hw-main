@@ -1,5 +1,11 @@
 import type { ProductType } from '@/api/req/products.api';
-import { makeObservable, observable, computed, action } from 'mobx';
+import {
+  makeObservable,
+  observable,
+  computed,
+  action,
+  runInAction,
+} from 'mobx';
 import type { IGlobalStore } from '@/store/interfaces';
 import {
   addToCart,
@@ -10,7 +16,12 @@ import {
 import axios from 'axios';
 import { RootStore } from '../root';
 
-type PrivateFields = '_items';
+type PrivateFields =
+  | '_items'
+  | 'updateItemQuantity'
+  | 'addNewItem'
+  | 'removeItemAtIndex'
+  | 'setItems';
 
 export class CartStore implements IGlobalStore {
   readonly rootStore: RootStore;
@@ -29,6 +40,10 @@ export class CartStore implements IGlobalStore {
       clear: action,
       init: action,
       destroy: action,
+      updateItemQuantity: action,
+      addNewItem: action,
+      removeItemAtIndex: action,
+      setItems: action,
     });
   }
 
@@ -67,30 +82,51 @@ export class CartStore implements IGlobalStore {
     return false;
   };
 
+  private updateItemQuantity = action(
+    (item: CartItemType, newQuantity: number) => {
+      item.quantity = newQuantity;
+    }
+  );
+
+  private addNewItem = action((product: ProductType, quantity: number) => {
+    this._items.push({ product, quantity });
+  });
+
+  private removeItemAtIndex = action((index: number) => {
+    this._items.splice(index, 1);
+  });
+
+  private setItems = action((items: CartItemType[]) => {
+    this._items = items;
+  });
+
+  private updateItems = action(
+    (updater: (items: CartItemType[]) => CartItemType[]) => {
+      this._items = updater(this._items);
+    }
+  );
+
   addItem = async (
     product: ProductType,
     quantity: number = 1
   ): Promise<{ success: boolean; notAuthorized: boolean }> => {
     const existing = this._items.find((item) => item.product.id === product.id);
-    const originalQuantity = existing?.quantity || 0;
+    // const originalQuantity = existing?.quantity || 0;
+    const originalItems = [...this._items];
 
     if (existing) {
-      existing.quantity += quantity;
+      this.updateItemQuantity(existing, existing.quantity + quantity);
     } else {
-      this._items.push({ product, quantity });
+      this.addNewItem(product, quantity);
     }
 
     try {
       await addToCart(product.id, quantity);
       return { success: true, notAuthorized: false };
     } catch (error) {
-      if (existing) {
-        existing.quantity = originalQuantity;
-      } else {
-        this._items = this._items.filter(
-          (item) => item.product.id !== product.id
-        );
-      }
+      runInAction(() => {
+        this._items = originalItems;
+      });
 
       if (this.handleAuthError(error)) {
         return { success: false, notAuthorized: true };
@@ -109,19 +145,20 @@ export class CartStore implements IGlobalStore {
     if (itemIndex === -1) return;
 
     const item = this._items[itemIndex];
-
     const originalItems = [...this._items];
 
     if (item.quantity > 1) {
-      item.quantity -= 1;
+      this.updateItemQuantity(item, item.quantity - 1);
     } else {
-      this._items.splice(itemIndex, 1);
+      this.removeItemAtIndex(itemIndex);
     }
 
     try {
       await removeFromCart(id, 1);
     } catch (error) {
-      this._items = originalItems;
+      runInAction(() => {
+        this._items = originalItems;
+      });
 
       if (!this.handleAuthError(error)) {
         this.rootStore.toastStore.show(
@@ -137,13 +174,16 @@ export class CartStore implements IGlobalStore {
     if (!itemExists) return;
 
     const originalItems = [...this._items];
+    const itemQuantity = itemExists.quantity;
 
-    this._items = this._items.filter((item) => item.product.id !== id);
+    this.setItems(this._items.filter((item) => item.product.id !== id));
 
     try {
-      await removeFromCart(id, itemExists.quantity);
+      await removeFromCart(id, itemQuantity);
     } catch (error) {
-      this._items = originalItems;
+      runInAction(() => {
+        this._items = originalItems;
+      });
 
       if (!this.handleAuthError(error)) {
         this.rootStore.toastStore.show(
@@ -165,9 +205,9 @@ export class CartStore implements IGlobalStore {
     this.removeOneItem(id);
   };
 
-  clear = (): void => {
+  clear = action((): void => {
     this._items = [];
-  };
+  });
 
   init = async (): Promise<boolean> => {
     if (!this.rootStore.userStore.user) {
@@ -177,7 +217,9 @@ export class CartStore implements IGlobalStore {
 
     try {
       const response = await getCart();
-      this._items = response;
+      runInAction(() => {
+        this._items = response;
+      });
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;

@@ -160,7 +160,6 @@ export class UserStore implements IGlobalStore {
     this._user = null;
     this._isLoading = false;
     this._error = '';
-    this._initLoading = true;
   };
 
   init = async (): Promise<boolean> => {

@@ -20,7 +20,7 @@
 }
 
 .profileExit {
-  background-color: $color-error;
+  background-color: $color-error !important;
 
   &:hover {
     background-color: $color-error !important;

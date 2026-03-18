@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import routerData from '@/config/routerData';
 import { useToastStore, useUserStore } from '@/store';
 import { observer } from 'mobx-react-lite';
@@ -14,17 +14,19 @@ import Button from '@/components/Button';
 const ProfileUserData = () => {
   const { user, initLoading, logOut } = useUserStore();
   const { show } = useToastStore();
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
 
   const router = useRouter();
 
-  React.useEffect(() => {
-    if (!initLoading && !user) {
-      show('You need to log in to view the user profile page', 'error');
+  useEffect(() => {
+    if (!initLoading && !user && !isLoggingOut) {
       router.replace(routerData.login.href);
+      show('You need to log in to view the user profile page', 'error');
     }
-  }, [initLoading, router, show, user]);
+  }, [initLoading, isLoggingOut, router, show, user]);
 
   const handleLogout = () => {
+    setIsLoggingOut(true);
     logOut();
     router.push('/');
   };
