@@ -2,15 +2,28 @@
 
 import * as React from 'react';
 import styles from './Cart.module.scss';
-import { useCartStore } from '@/store';
+import { useCartStore, useToastStore, useUserStore } from '@/store';
 import Container from '@/components/Container';
 import Text from '@/components/Text';
 import { observer } from 'mobx-react-lite';
 import EmptyCart from './EmptyCart';
 import CartItem from './CartItem';
+import { useRouter } from 'next/navigation';
+import routerData from '@/config/routerData';
 
 const Cart: React.FC = () => {
   const { items, totalCount, totalPrice } = useCartStore();
+  const { user } = useUserStore();
+  const { show } = useToastStore();
+
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!user) {
+      show('You need to log in to view the cart page', 'error');
+      router.push(routerData.login.href);
+    }
+  }, [router, user, show]);
 
   if (items.length === 0) {
     return <EmptyCart />;
